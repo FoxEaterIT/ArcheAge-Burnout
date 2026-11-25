@@ -97,6 +97,9 @@ const worldCatalog = Object.fromEntries(Object.entries(literals.worldCatalog).ma
 
 writeData("trade-routes", literals.rows)
 writeData("trade-icons", tradeIcons)
+// Nomi delle icone che aprono una scheda: stesso slug dell'originale (itemSlug, senza togliere i trattini ai bordi).
+const itemSlug = (name) => name.toLowerCase().replace(/['’]/g, "").replace(/[^a-z0-9]+/g, "-")
+writeData("trade-links", Object.fromEntries(Object.keys(literals.iconFiles).map((name) => [name, itemSlug(name)]).filter(([, id]) => id in literals.worldCatalog || id in literals.gameItems || id in literals.acquisition)))
 writeData("benches", benches)
 writeData("acquisition", literals.acquisition)
 writeData("material-points", literals.materialPoints)

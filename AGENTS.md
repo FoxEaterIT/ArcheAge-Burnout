@@ -19,7 +19,7 @@ L'originale è `reference/atlante-dei-commerci-offline.html` (31 MB, fuori da gi
 
 Documenti in `docs/`: piani in `docs/plans/`, esiti in `docs/outcomes/`. Interfaccia, commenti e documentazione in italiano; i nomi del gioco (oggetti, luoghi, eventi) restano in inglese come nel client. Commit in inglese, Conventional Commits.
 
-Risposte in chat: sempre nello stile della skill `caveman` (`.agents/skills/caveman/SKILL.md`), brevi, dalla prima risposta e senza aspettare `/caveman`. Risposte lunghe solo quando l'utente le chiede, e solo per quella richiesta; "stop caveman" o "normal mode" lo spegne per la sessione. Valgono le eccezioni della skill (*When to break the rules*). Codice, documenti, commit e piani restano in prosa normale.
+Risposte in chat: stile della skill `caveman` (`.agents/skills/caveman/SKILL.md`) dalla prima risposta, con le sue eccezioni; risposte lunghe solo su richiesta, "stop caveman" lo spegne. Codice, documenti, commit e piani in prosa normale.
 
 <!-- kit:section decisions -->
 ## Decisioni prese
@@ -40,8 +40,16 @@ Next.js 16 (App Router, `src/`) + React 19 + TypeScript. UI: Tailwind CSS v4 e s
 
 - `src/app/`: route. `next.config.ts` ha `cacheComponents` e `partialPrefetching` accesi (default di Next 16.4): per cache e prefetch valgono le skill `next-cache-components-*` e `next-partial-prefetching-*`.
 - `src/components/ui/`: componenti shadcn (`pnpm dlx shadcn@latest add <nome>`), si possono modificare segnando le modifiche con `Burnout:`. `cn` arriva dal pacchetto `cn` di shadcn, non da `clsx` + `tailwind-merge`.
-- `src/lib/`: logica pura da testare (rotte, ricette, orari degli eventi, statistiche del builder), separata dai componenti. Test accanto al codice, `*.test.ts`.
+- `src/lib/`: logica pura da testare (rotte, ricette, orari degli eventi, statistiche del builder). `game-data.utils.ts` è l'unico accesso ai JSON di `src/data/generated/` ed è `server-only`: ai componenti client passa solo il sottoinsieme che serve.
+- `src/hooks/`: custom hook (`use-*.ts`), uno per file.
 - `e2e/`: test Playwright.
+
+Convenzioni dei file (2026-11-25, decise dal proprietario):
+- tipi e interfacce in file `*.types.ts`;
+- funzioni e costanti in file `*.utils.ts`, con i test accanto (`*.utils.test.ts`);
+- stato, effetti e logica dei componenti client in custom hook;
+- i file `.tsx` contengono solo TSX: niente calcoli, niente tipi esportati, pochissima logica;
+- best practice React e Next.js secondo la skill `vercel-react-best-practices`: Server Components di default, `"use client"` solo dove serve interazione, dati minimi passati al client, nessun componente definito dentro un altro.
 
 <!-- kit:section checks -->
 ## Prove
