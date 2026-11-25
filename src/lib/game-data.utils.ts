@@ -97,3 +97,14 @@ export function runCatalogSearch(query: CatalogQuery): CatalogResults {
   const r = searchCatalog(catalogEntries, query, rarityOf, levelOf)
   return { total: r.total, pages: r.pages, page: r.page, rows: r.items.map(([id, e]) => catalogRow(id, e)) }
 }
+
+const mapCandidates = catalogEntries.filter(([id]) => !id.includes("/"))
+export const MAP_SEARCH_LIMIT = 16
+
+/** Ricerca della mappa: nomi che contengono la query, il nome esatto per primo, al massimo 16. */
+export function searchMapItems(query: string) {
+  const q = query.trim().toLowerCase()
+  if (!q) return { rows: [] as CatalogRow[], more: false }
+  const hits = mapCandidates.filter(([, e]) => e[0].toLowerCase().includes(q)).toSorted((a, b) => Number(b[1][0].toLowerCase() === q) - Number(a[1][0].toLowerCase() === q))
+  return { rows: hits.slice(0, MAP_SEARCH_LIMIT).map(([id, e]) => catalogRow(id, e)), more: hits.length > MAP_SEARCH_LIMIT }
+}
