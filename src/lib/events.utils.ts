@@ -43,7 +43,7 @@ export function eventState(type: EventType, now: number, localFormat: Intl.DateT
     active: active !== undefined,
     status: active !== undefined ? "In corso · termina tra" : "Prossima apertura tra",
     countdown: countdown((active !== undefined ? end : start) - now),
-    local: "Ora locale: " + localFormat.format(start) + " → " + localFormat.format(end),
+    local: "Ora del PC: " + localFormat.format(start) + " – " + localFormat.format(end).split(", ").at(-1),
     note: `Tre aperture al giorno · durata ${type.duration} minuti.`,
   }
 }

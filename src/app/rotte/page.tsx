@@ -17,9 +17,7 @@ export default function RottePage() {
           <BenchRecipes benches={benches} />
           <TradeRoutes routes={tradeRoutes} rewards={rewardOptions(tradeRoutes)} origins={placeOptions(tradeRoutes, "origin")} destinations={placeOptions(tradeRoutes, "destination")} cargoIds={cargoRecordIds} />
         </div>
-        <div className="order-first xl:order-none">
-          <EventsRail />
-        </div>
+        <EventsRail />
       </div>
     </>
   )

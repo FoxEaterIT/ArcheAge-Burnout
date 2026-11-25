@@ -48,7 +48,7 @@ export function EventBoard() {
                   {track?.slots.map((slot, j) => <span key={j} className={cn("absolute inset-y-0 rounded-sm", FILL[type.family])} style={{ left: `${slot.left * 100}%`, width: `${slot.width * 100}%` }} />)}
                   {e.ready ? <span aria-hidden className="absolute -inset-y-1 w-0.5 bg-white shadow-[0_0_6px_white]" style={{ left: `${e.marker * 100}%` }} /> : null}
                 </div>
-                <p className="text-xs text-muted">{s ? `${s.local} · ${s.note}` : " "}</p>
+                <p className="text-xs text-muted">{s ? `${s.local} · ${type.duration} minuti` : " "}</p>
               </div>
               <p className={cn("text-3xl font-semibold tracking-tight tabular-nums md:text-right", s?.active ? TONE[type.family] : "text-ink")}>{s?.countdown ?? "--:--:--"}</p>
             </article>

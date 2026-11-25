@@ -102,7 +102,7 @@ export function RecordView({ record: r }: { record: RecordModel }) {
                   {r.salvage.items.map((s) => (
                     <li key={s.gear.id} className="rounded-lg border border-line bg-bg px-3 py-2 text-sm">
                       <EntryLink entry={s.gear} />
-                      <span className="mt-0.5 block pl-9 text-xs text-muted">→ {s.quantity} × {r.name} ({s.chance}%)</span>
+                      <span className="mt-0.5 block pl-9 text-xs text-muted">dà {s.quantity} × {r.name} ({s.chance}%)</span>
                     </li>
                   ))}
                 </ul>
