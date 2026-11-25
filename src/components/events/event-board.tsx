@@ -1,6 +1,6 @@
 "use client"
 // Eventi: countdown per evento, timeline della giornata italiana, tabella e calendario da scaricare.
-import { CalendarPlus } from "lucide-react"
+import { CalendarPlus, CircleDot } from "lucide-react"
 import { cn } from "cn"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -30,40 +30,40 @@ export function EventBoard() {
         </details>
       </div>
 
-      <div className="grid gap-4 md:grid-cols-2">
-        {(e.ready ? e.states : EVENT_TYPES.map((t) => ({ key: t.key, title: t.title, family: t.family, active: false, status: "", countdown: "--:--:--", local: "", note: "" }))).map((s) => (
-          <article key={s.key} className={cn("rounded-xl border bg-surface p-5 sm:p-7", s.active ? "border-current " + TONE[s.family] : "border-line")}>
-            <h2 className="font-display text-2xl text-ink">{s.title}</h2>
-            <p className={cn("mt-4 text-sm font-semibold", TONE[s.family])}>{s.active ? "● " : ""}{s.status}</p>
-            <p className="font-sans text-5xl font-semibold tracking-tight text-ink tabular-nums sm:text-6xl">{s.countdown}</p>
-            <p className="mt-2 text-sm text-ink-2">{s.local}</p>
-            <p className="text-xs text-muted">{s.note}</p>
-          </article>
-        ))}
-      </div>
-
-      {e.timeline ? (
-        <section aria-labelledby="day" className="space-y-3 rounded-xl border border-line bg-surface p-5">
-          <div className="flex flex-wrap items-center justify-between gap-3">
-            <h2 id="day" className="font-display text-xl">Finestre confermate · ora italiana</h2>
-            <Button variant="outline" onClick={e.download}><CalendarPlus aria-hidden />Scarica calendario · avviso 10 minuti prima</Button>
-          </div>
-          <div className="grid gap-x-4 gap-y-2 sm:grid-cols-[190px_1fr] sm:items-center">
-            {e.timeline.tracks.map((t) => (
-              <div key={t.key} className="contents">
-                <span className="text-sm text-ink-2">{t.title}</span>
-                <div className="relative h-3 rounded-sm bg-[repeating-linear-gradient(to_right,var(--raised)_0_calc(12.5%-1px),var(--line-strong)_calc(12.5%-1px)_12.5%)]">
-                  {t.slots.map((slot, i) => <span key={i} className={cn("absolute inset-y-0 rounded-sm", FILL[t.family])} style={{ left: `${slot.left * 100}%`, width: `${slot.width * 100}%` }} />)}
-                  <span aria-hidden className="absolute -inset-y-1 w-0.5 bg-white shadow-[0_0_6px_white]" style={{ left: `${e.marker * 100}%` }} />
-                </div>
+      <section aria-labelledby="day" className="space-y-1 rounded-xl border border-line bg-surface p-4 sm:p-5">
+        <div className="mb-3 flex flex-wrap items-center justify-between gap-3">
+          <h2 id="day" className="font-display text-xl">Aperture di oggi · ora italiana</h2>
+          <Button variant="outline" onClick={e.download}><CalendarPlus aria-hidden />Scarica calendario · avviso 10 minuti prima</Button>
+        </div>
+        {EVENT_TYPES.map((type, i) => {
+          const s = e.states[i]
+          const track = e.timeline?.tracks[i]
+          return (
+            <article key={type.key} aria-label={type.title} className={cn("grid gap-x-5 gap-y-2 border-t border-line py-4 first-of-type:border-0 md:grid-cols-[220px_minmax(0,1fr)_150px] md:items-center")}>
+              <div>
+                <h3 className="font-display text-lg">{type.title}</h3>
+                <p className={cn("flex items-center gap-1.5 text-sm font-semibold", TONE[type.family])}>
+                  {s?.active ? <CircleDot aria-hidden className="size-3.5 animate-pulse" /> : null}
+                  {s?.status ?? " "}
+                </p>
               </div>
-            ))}
-            <span className="hidden sm:block" />
-            <div className="flex justify-between text-xs text-dim tabular-nums">{AXIS.map((h) => <span key={h}>{h}</span>)}</div>
-          </div>
-          <p className="text-xs text-muted">Linea bianca: ora visualizzata.</p>
-        </section>
-      ) : null}
+              <div className="space-y-1.5">
+                <div className="relative h-3 rounded-sm bg-[repeating-linear-gradient(to_right,var(--raised)_0_calc(12.5%-1px),var(--line-strong)_calc(12.5%-1px)_12.5%)]">
+                  {track?.slots.map((slot, j) => <span key={j} className={cn("absolute inset-y-0 rounded-sm", FILL[type.family])} style={{ left: `${slot.left * 100}%`, width: `${slot.width * 100}%` }} />)}
+                  {e.ready ? <span aria-hidden className="absolute -inset-y-1 w-0.5 bg-white shadow-[0_0_6px_white]" style={{ left: `${e.marker * 100}%` }} /> : null}
+                </div>
+                <p className="text-xs text-muted">{s ? `${s.local} · ${s.note}` : " "}</p>
+              </div>
+              <p className={cn("text-3xl font-semibold tracking-tight tabular-nums md:text-right", s?.active ? TONE[type.family] : "text-ink")}>{s?.countdown ?? "--:--:--"}</p>
+            </article>
+          )
+        })}
+        <div className="grid border-t border-line pt-2 md:grid-cols-[220px_minmax(0,1fr)_150px] md:gap-x-5">
+          <span className="hidden md:block" />
+          <div className="flex justify-between text-xs text-dim tabular-nums">{AXIS.map((h) => <span key={h}>{h}</span>)}</div>
+        </div>
+        <p className="pt-1 text-xs text-muted">Linea bianca: ora visualizzata.</p>
+      </section>
 
       {e.timeline ? (
         <section aria-labelledby="schedule" className="space-y-3">

@@ -2,6 +2,7 @@
 // Calcolatore di una ricetta: livello, pezzi desiderati, ingredienti e catena di produzione.
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
+import { GameSelect } from "@/components/ui/game-select"
 import { Label } from "@/components/ui/label"
 import { useRecipeCalculator } from "@/hooks/use-recipe-calculator"
 import type { CraftChain } from "@/lib/game.types"
@@ -23,9 +24,7 @@ export function RecipeCalculator({ recipe }: { recipe: RecipeModel }) {
         {recipe.tiers.length > 1 ? (
           <div className="grid gap-1.5">
             <Label htmlFor={recipe.key + "-tier"}>Livello della ricetta</Label>
-            <select id={recipe.key + "-tier"} value={tierIndex} onChange={(e) => setTierIndex(Number(e.target.value))} className="h-9 rounded-lg border border-input bg-input/30 px-2.5 text-sm">
-              {recipe.tiers.map((t, i) => <option key={i} value={i}>{t[0] || `Variante ${i + 1}`}</option>)}
-            </select>
+            <GameSelect id={recipe.key + "-tier"} value={String(tierIndex)} onChange={(v) => setTierIndex(Number(v))} options={recipe.tiers.map((t, i) => ({ value: String(i), label: t[0] || `Variante ${i + 1}` }))} className="w-auto min-w-44" />
           </div>
         ) : null}
         {plan.calculable ? (

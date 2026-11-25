@@ -17,7 +17,7 @@ OWN-WORLD: fondo zinco quasi nero (#09090b), superfici #141416/#1c1c20, linee #2
 
 STORY: chi arriva capisce subito dove porta un pacco e quanto rende, da dove viene un materiale e quando apre il prossimo evento; ogni nome porta alla sua scheda.
 
-FIRST VIEWPORT: barra laterale con emblema e cinque sezioni (barra in basso su mobile); intestazione con titolo e filtri su una riga; contenuto in schede con la linea come elemento principale; colonna eventi a destra sulle pagine larghe.
+FIRST VIEWPORT: barra laterale con emblema e cinque sezioni (barra in basso su mobile); intestazione con titolo, filtri sotto (richiudibili su mobile); carichi con la linea come elemento principale e badge "Migliore"; sulle Rotte larghe la colonna "Prossime aperture" a destra. Gli eventi sono righe con la loro fascia sulla giornata. Adattamenti: la scheda usa la colonna destra per la mappa; il catalogo resta una griglia di categorie, perché su una pagina operativa lo schema noto serve a trovare in fretta.
 
 FORM: linea di trasporto fusa con la palette di ArcheAge Chronicles; challenger 4 della mano (wayfinding-cartography-signage-midnight-transit-diagram), scelto dal proprietario tra tre mockup. seed:9a6dd126869be236
 

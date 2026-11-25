@@ -20,6 +20,9 @@ export function useItemPositions(section: PositionsSection) {
     label: section.sources[source].label,
     point: points.length === 1 ? points[0] : selected,
     overview: selected || points.length === 1 ? [] : points,
-    allLabel: `Mostra tutti i ${points.length}${section.flowers && section.sources[source].label.startsWith("Raccolta") ? " fiori" : " punti"}`,
+    spotOptions: [
+      { value: "all", label: `Mostra tutti i ${points.length}${section.flowers && section.sources[source].label.startsWith("Raccolta") ? " fiori" : " punti"}` },
+      ...points.map(([x, y], i) => ({ value: String(i), label: `Punto ${i + 1} di ${points.length} · ${x}, ${y}` })),
+    ],
   }
 }

@@ -1,6 +1,7 @@
 // Statistiche: livello e punti attributo, riepilogo e valori di combattimento per gruppo.
 import { Minus, Plus, RotateCcw } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { GameSelect } from "@/components/ui/game-select"
 import type { CharacterBuild } from "@/lib/builder.types"
 import { ATTRIBUTES, MAX_LEVEL, STARTING_STATS, formatStat, pointsForLevel, statLabel } from "@/lib/builder.utils"
 import { Hud } from "./gear-board"
@@ -15,12 +16,10 @@ export function StatsPanel({ cb }: { cb: CharacterBuild }) {
         <h3 className="font-display text-xl text-gold">{(cb.build.name.trim() || cb.build.archetype) + " · Lv. " + cb.build.level}</h3>
         <Hud cb={cb} />
         <div className="flex flex-wrap items-center gap-3 text-sm">
-          <label className="flex items-center gap-2">
-            Livello personaggio
-            <select value={cb.build.level} onChange={(e) => cb.setLevel(Number(e.target.value))} className="h-8 rounded-lg border border-input bg-input/30 px-2 tabular-nums">
-              {LEVELS.map((n) => <option key={n} value={n} disabled={pointsForLevel(n) < cb.spent}>{n}</option>)}
-            </select>
-          </label>
+          <div className="flex items-center gap-2">
+            <span>Livello personaggio</span>
+            <GameSelect label="Livello personaggio" value={String(cb.build.level)} onChange={(v) => cb.setLevel(Number(v))} options={LEVELS.map((n) => ({ value: String(n), label: String(n), disabled: pointsForLevel(n) < cb.spent }))} className="w-20" />
+          </div>
           <strong className="tabular-nums text-gold">{cb.left} punti disponibili</strong>
           <Button variant="ghost" size="sm" onClick={cb.resetPoints} disabled={!cb.spent}><RotateCcw />Riassegna punti</Button>
         </div>

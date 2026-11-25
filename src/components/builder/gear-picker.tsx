@@ -2,6 +2,7 @@
 import Link from "next/link"
 import { cn } from "cn"
 import { Button } from "@/components/ui/button"
+import { GameSelect } from "@/components/ui/game-select"
 import { Input } from "@/components/ui/input"
 import { GameIcon } from "@/components/game/game-icon"
 import type { BuilderData, CharacterBuild, GearPiece } from "@/lib/builder.types"
@@ -20,12 +21,10 @@ export function GearPicker({ cb, data, pieces }: { cb: CharacterBuild; data: Bui
       {worn ? (
         <div className="space-y-2 rounded-lg border border-line bg-bg p-3 text-sm">
           {table ? (
-            <label className="flex items-center gap-2">
-              Livello di tempra
-              <select value={rank} onChange={(e) => cb.setTemper(Number(e.target.value))} className="h-8 rounded-lg border border-input bg-input/30 px-2">
-                {temperRanks(table).map((r) => <option key={r} value={r}>+{r}</option>)}
-              </select>
-            </label>
+            <div className="flex items-center gap-2">
+              <span id="temper-label">Livello di tempra</span>
+              <GameSelect label="Livello di tempra" value={String(rank)} onChange={(v) => cb.setTemper(Number(v))} options={temperRanks(table).map((r) => ({ value: String(r), label: "+" + r }))} className="w-24" />
+            </div>
           ) : slot.type === "Weapon" || slot.type === "Armor" ? (
             <p className="text-xs text-muted">Progressione di tempra non disponibile.</p>
           ) : null}

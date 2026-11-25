@@ -93,10 +93,12 @@ export const catalogGroups: [string, CatalogTypeLink[]][] = DB_GROUPS.map(([titl
 ])
 
 /** Equipaggiamento leggendario in vetrina, come nell'originale (i primi 9 con arte). */
+// Un pezzo per nome: le varianti con lo stesso nome (classi diverse) renderebbero la vetrina ripetitiva.
 export const featuredGear: CatalogRow[] = typed
   .filter((t) => t.e[1] === "Oggetti" && /Equipment.*Legendary/.test(t.e[2]) && t.e[5])
+  .filter((t, i, all) => all.findIndex((o) => o.e[0] === t.e[0]) === i)
   .slice(0, 9)
-  .map((t) => catalogRow(t.id, t.e, t.type))
+  .map((t) => ({ ...catalogRow(t.id, t.e, t.type), type: [t.type, t.e[2].split(" · ")[2]].filter(Boolean).join(" · ") }))
 
 export function runCatalogSearch(query: CatalogQuery): CatalogResults {
   const r = searchCatalog(catalogEntries, query, rarityOf, levelOf)

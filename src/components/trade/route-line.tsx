@@ -18,7 +18,7 @@ export function RouteLine({ origin, stops }: { origin: string; stops: RouteStop[
           <span aria-hidden className={cn("absolute -left-[23px] size-[13px] rounded-full border-2", s.best ? "border-gold bg-gold shadow-[0_0_10px_var(--gold)]" : "border-line-strong bg-bg")} />
           <span className={cn("min-w-0", s.best ? "text-gold" : "text-ink-2")}>
             {s.destination}
-            {s.best ? <span className="sr-only"> (ricavo migliore)</span> : null}
+            {s.best ? <span className="ml-2 rounded-sm bg-gold px-1.5 py-px align-[1px] text-[10px] font-bold tracking-wide text-black uppercase">Migliore<span className="sr-only"> ricavo</span></span> : null}
           </span>
           {s.gold !== null ? (
             <span className={cn("tabular-nums", s.best ? "font-semibold text-gold" : "text-ink-2")}>{fmt(s.gold)} oro</span>
