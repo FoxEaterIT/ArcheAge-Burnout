@@ -25,7 +25,10 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           <span className="font-display text-lg">ArcheAge Burnout</span>
         </header>
         {children}
-        <footer className="mt-auto border-t border-line px-6 py-4 text-xs text-dim lg:px-10">ArcheAge Burnout · Gilda Burnout. Dati e cartografia: RaidDex, 8 novembre 2026. Ricavi base: i prezzi effettivi vanno controllati in gioco.</footer>
+        <footer className="mt-auto space-y-1 border-t border-line px-6 py-4 text-xs text-dim lg:px-10">
+          <p>ArcheAge Burnout · Gilda Burnout. Dati e cartografia: RaidDex, 8 novembre 2026. Ricavi base: i prezzi effettivi vanno controllati in gioco.</p>
+          <p>Progetto non ufficiale, non affiliato né approvato da XLGames. ArcheAge, nomi, immagini e dati di gioco appartengono a XLGames e ai rispettivi titolari.</p>
+        </footer>
       </div>
       <nav aria-label="Sezioni" className="fixed inset-x-0 bottom-0 z-40 grid grid-cols-5 border-t border-line bg-surface/95 pb-[env(safe-area-inset-bottom)] backdrop-blur md:hidden">
         <Suspense fallback={<NavLinks mode="bottom" />}>
