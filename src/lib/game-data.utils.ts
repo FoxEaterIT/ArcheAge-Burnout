@@ -11,6 +11,11 @@ import materialPointsJson from "@/data/generated/material-points.json"
 import recipeBookJson from "@/data/generated/recipe-book.json"
 import routesJson from "@/data/generated/trade-routes.json"
 import worldCatalogJson from "@/data/generated/world-catalog.json"
+import gearValuesJson from "@/data/generated/gear-values.json"
+import temperJson from "@/data/generated/temper-tables.json"
+import traitJson from "@/data/generated/trait-book.json"
+import type { BuilderData } from "./builder.types"
+import { CLASSES, CLASS_NAMES } from "./builder.utils"
 import { DB_GROUPS, dbType, searchCatalog } from "./catalog.utils"
 import { itemSlug } from "./text.utils"
 import type { Bench, CatalogEntry, CatalogQuery, CatalogResults, CatalogRow, CatalogTypeLink, GameItem, ItemLocations, ItemUse, Point, Recipe, Salvage, TradeRoute } from "./game.types"
@@ -107,4 +112,25 @@ export function searchMapItems(query: string) {
   if (!q) return { rows: [] as CatalogRow[], more: false }
   const hits = mapCandidates.filter(([, e]) => e[0].toLowerCase().includes(q)).toSorted((a, b) => Number(b[1][0].toLowerCase() === q) - Number(a[1][0].toLowerCase() === q))
   return { rows: hits.slice(0, MAP_SEARCH_LIMIT).map(([id, e]) => catalogRow(id, e)), more: hits.length > MAP_SEARCH_LIMIT }
+}
+
+/** Dati del Character Builder, già ridotti a ciò che serve al client. */
+export function builderData(): BuilderData {
+  const equipment = catalogEntries.filter(([, e]) => e[2].startsWith("Equipment · ")).map(([id, e]) => ({ id, name: e[0], tags: e[2].split(" · "), art: e[5] }))
+  const skillArt = Object.fromEntries(catalogEntries.filter(([, e]) => e[1] === "Abilità" && e[5]).map(([, e]) => [e[2] + "|" + e[0], e[5]!]))
+  const classArt = Object.fromEntries(
+    CLASS_NAMES.flatMap((name) => {
+      const art = equipment.find((p) => p.art && p.tags[2] === CLASSES[name][0])?.art
+      return art ? [[name, art]] : []
+    }),
+  )
+  return {
+    equipment,
+    gearValues: gearValuesJson as BuilderData["gearValues"],
+    temperTables: temperJson as unknown as BuilderData["temperTables"],
+    traitBook: traitJson as unknown as BuilderData["traitBook"],
+    skillArt,
+    classArt,
+    fallbackSkillArt: categoryArt["Abilità"] ?? null,
+  }
 }

@@ -3,10 +3,12 @@ import Image from "next/image"
 import Link from "next/link"
 import { Suspense } from "react"
 import { ActiveNavLinks, NavLinks } from "./app-nav"
+import { LegacyHashRedirect } from "./legacy-hash-redirect"
 
 export function AppShell({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex min-h-dvh">
+      <LegacyHashRedirect />
       <aside className="sticky top-0 hidden h-dvh w-[92px] shrink-0 flex-col items-center gap-4 border-r border-line bg-surface py-4 md:flex">
         <Link href="/rotte" aria-label="ArcheAge Burnout, vai alle rotte" className="rounded-lg">
           <Image src="/game/emblem.png" alt="Emblema della gilda Burnout" width={60} height={60} unoptimized className="mix-blend-screen" priority />
