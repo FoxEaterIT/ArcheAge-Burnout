@@ -35,3 +35,15 @@ export type RouteStop = { destination: string; payout: string; gold: number | nu
 export type CatalogRow = { id: string; name: string; category: string; type: string; rarity: string; level: string; art: string | null }
 export type CatalogTypeLink = { type: string; count: number; art: string | null }
 export type CatalogResults = { total: number; pages: number; page: number; rows: CatalogRow[] }
+
+export type CraftMaterial = { id: string; label: string; count: number | null }
+/** Calcolo di un livello di ricetta per N pezzi. */
+export type TierPlan = { calculable: boolean; batches: number; produced: number; surplus: number; gold: number | null; materials: CraftMaterial[] }
+export type ChainStep = { id: string; level: string; batches: number; needed: number; parts: { id: string; count: number }[] }
+export type CraftChain = { cycle: boolean; steps: ChainStep[]; raw: { id: string; count: number }[]; gold: number }
+
+export type MapViewport = { width: number; dpr: number; scrollLeft: number; scrollTop: number; clientWidth: number; clientHeight: number }
+export type MapTile = { key: string; src: string; left: number; top: number; size: number }
+export type MapMarker = { key: string; left: number; top: number; label: string; title: string; kind: "point" | "pin" | "dot" }
+/** Fonte di un oggetto sulla mappa: etichetta e punti. */
+export type MapSource = { label: string; points: Point[] }

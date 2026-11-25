@@ -1,7 +1,8 @@
 // Guscio dell'app: emblema della gilda e navigazione, contenuto a destra.
 import Image from "next/image"
 import Link from "next/link"
-import { BottomNav, RailNav } from "./app-nav"
+import { Suspense } from "react"
+import { ActiveNavLinks, NavLinks } from "./app-nav"
 
 export function AppShell({ children }: { children: React.ReactNode }) {
   return (
@@ -10,7 +11,11 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         <Link href="/rotte" aria-label="ArcheAge Burnout, vai alle rotte" className="rounded-lg">
           <Image src="/game/emblem.png" alt="Emblema della gilda Burnout" width={60} height={60} unoptimized className="mix-blend-screen" priority />
         </Link>
-        <RailNav />
+        <nav aria-label="Sezioni" className="flex flex-col items-center gap-1">
+          <Suspense fallback={<NavLinks mode="rail" />}>
+            <ActiveNavLinks mode="rail" />
+          </Suspense>
+        </nav>
       </aside>
       <div className="flex min-w-0 flex-1 flex-col pb-20 md:pb-0">
         <header className="flex items-center gap-3 border-b border-line px-4 py-2.5 md:hidden">
@@ -20,7 +25,11 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         {children}
         <footer className="mt-auto border-t border-line px-6 py-4 text-xs text-dim lg:px-10">ArcheAge Burnout · Gilda Burnout. Dati e cartografia: RaidDex, 8 novembre 2026. Ricavi base: i prezzi effettivi vanno controllati in gioco.</footer>
       </div>
-      <BottomNav />
+      <nav aria-label="Sezioni" className="fixed inset-x-0 bottom-0 z-40 grid grid-cols-5 border-t border-line bg-surface/95 pb-[env(safe-area-inset-bottom)] backdrop-blur md:hidden">
+        <Suspense fallback={<NavLinks mode="bottom" />}>
+          <ActiveNavLinks mode="bottom" />
+        </Suspense>
+      </nav>
     </div>
   )
 }
