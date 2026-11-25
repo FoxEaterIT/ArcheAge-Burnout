@@ -1,0 +1,1 @@
+{"packs": ["base", "practices", "web", "next-react", "design", "production"], "tools": ["claude", "codex", "cursor"], "exclude": ["browser-testing-with-devtools", "observability-and-instrumentation", "setup-pre-commit", "webapp-testing", "ci-cd-and-automation", "shipping-and-launch"]}

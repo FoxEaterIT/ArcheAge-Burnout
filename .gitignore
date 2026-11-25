@@ -1,0 +1,30 @@
+# Next.js
+node_modules
+.next
+out
+build
+next-env.d.ts
+*.tsbuildinfo
+
+# Test
+coverage
+playwright-report
+test-results
+
+# Env
+.env*
+!.env.example
+
+# Originale offline (31 MB): si copia a mano dallo zip
+reference/*.html
+
+# Sistema
+.DS_Store
+*.log
+.vercel
+
+# Altro da create-next-app
+.pnp
+.pnp.*
+*.pem
+.pnpm-debug.log*

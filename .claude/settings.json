@@ -1,0 +1,41 @@
+{
+  "enabledPlugins": {
+    "differential-review@trailofbits": false,
+    "21st@21st-dev": false,
+    "modern-web-guidance@claude-plugins-official": false,
+    "static-analysis@trailofbits": false,
+    "sharp-edges@trailofbits": false,
+    "supply-chain-risk-auditor@trailofbits": false,
+    "claude-code-setup@claude-plugins-official": false,
+    "design@knowledge-work-plugins": false,
+    "design@synced": false,
+    "engineering@knowledge-work-plugins": false,
+    "cowork-plugin-management@knowledge-work-plugins": false,
+    "claude-seo@agricidaniel-claude-seo": false,
+    "reverse-engineering@reverse-engineering-skill": false,
+    "superpowers@claude-plugins-official": false,
+    "superpowers@synced": false,
+    "modern-web-guidance@synced": false,
+    "frontend-design@synced": false,
+    "frontend-design@claude-plugins-official": false,
+    "ui-ux-pro-max@ui-ux-pro-max-skill": false
+  },
+  "extraKnownMarketplaces": {
+    "trailofbits": {
+      "source": {
+        "source": "github",
+        "repo": "trailofbits/skills"
+      }
+    }
+  },
+  "disableClaudeAiConnectors": true,
+  "model": "sonnet",
+  "modelSettings": {
+    "claude-sonnet-5-5": {
+      "effortLevel": "medium"
+    },
+    "claude-opus-5-5": {
+      "effortLevel": "high"
+    }
+  }
+}

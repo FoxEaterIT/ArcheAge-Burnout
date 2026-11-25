@@ -1,0 +1,27 @@
+# Codex in ArcheAge Burnout: modello ed effort economici di default, plugin e app di OpenAI non usati spenti.
+# Per un task difficile: /model nella TUI (gpt-6.2-astra) solo per quel task.
+
+model = "gpt-6.2-sol"
+model_reasoning_effort = "low"
+
+[features]
+apps = false
+
+[plugins."documents@openai-primary-runtime"]
+enabled = false
+[plugins."pdf@openai-primary-runtime"]
+enabled = false
+[plugins."spreadsheets@openai-primary-runtime"]
+enabled = false
+[plugins."presentations@openai-primary-runtime"]
+enabled = false
+[plugins."template-creator@openai-primary-runtime"]
+enabled = false
+[plugins."visualize@openai-bundled"]
+enabled = false
+[plugins."browser@openai-bundled"]
+enabled = false
+[plugins."unified-computer-use@openai-bundled"]
+enabled = false
+[plugins."computer-use@openai-bundled"]
+enabled = false
