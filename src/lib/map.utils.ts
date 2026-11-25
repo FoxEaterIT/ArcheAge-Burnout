@@ -6,6 +6,17 @@ const TILE = 256
 const BASE = 288
 /** La mappa è alta 4/3 della larghezza (1152 × 1536 a livello 2). */
 export const MAP_RATIO = 4 / 3
+/** Oltre questi punti una fonte si campiona: centomila segnaposti pesano sulla pagina e non si leggono. */
+export const MAX_SOURCE_POINTS = 2000
+/** Oltre questi punti non si offre la scelta del singolo punto. */
+export const MAX_LISTED_POINTS = 300
+
+/** Campione regolare di al massimo `max` punti, nell'ordine originale. */
+export function samplePoints(points: Point[], max = MAX_SOURCE_POINTS): Point[] {
+  if (points.length <= max) return points
+  const step = points.length / max
+  return Array.from({ length: max }, (_, i) => points[Math.floor(i * step)])
+}
 
 export function toFraction([x, y]: Point): [number, number] {
   return [(x - MAP_BOUNDS[0]) / (MAP_BOUNDS[2] - MAP_BOUNDS[0]), (y - MAP_BOUNDS[1]) / (MAP_BOUNDS[3] - MAP_BOUNDS[1])]

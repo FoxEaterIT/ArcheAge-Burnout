@@ -2,11 +2,9 @@
 import { Minus, Plus, RotateCcw } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { GameSelect } from "@/components/ui/game-select"
-import type { CharacterBuild } from "@/lib/builder.types"
-import { ATTRIBUTES, MAX_LEVEL, STARTING_STATS, formatStat, pointsForLevel, statLabel } from "@/lib/builder.utils"
+import type { CharacterBuild } from "@/hooks/character-build.types"
+import { ATTRIBUTES, LEVELS, STARTING_STATS, formatStat, pointsForLevel, statLabel } from "@/lib/builder.utils"
 import { Hud } from "./gear-board"
-
-const LEVELS = Array.from({ length: MAX_LEVEL }, (_, i) => i + 1)
 
 export function StatsPanel({ cb }: { cb: CharacterBuild }) {
   const base = cb.build.archetype ? STARTING_STATS[cb.build.archetype] : [0, 0, 0, 0, 0, 0]

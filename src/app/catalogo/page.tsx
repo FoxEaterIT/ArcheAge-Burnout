@@ -4,6 +4,7 @@ import { CatalogHome } from "@/components/catalog/catalog-home"
 import { CatalogResults } from "@/components/catalog/catalog-results"
 import { CatalogSearch } from "@/components/catalog/catalog-search"
 import { PageHeader } from "@/components/shell/app-shell"
+import { SearchFieldFallback } from "@/components/ui/search-field-fallback"
 import { isCatalogHome, parseCatalogQuery } from "@/lib/catalog.utils"
 import { catalogGroups, categories, featuredGear, rarities, runCatalogSearch } from "@/lib/game-data.utils"
 
@@ -13,7 +14,7 @@ export default function CatalogoPage({ searchParams }: PageProps<"/catalogo">) {
   return (
     <>
       <PageHeader title="Catalogo di Auroria" description="Armi, materiali, creature, missioni e tutto il resto: ogni voce porta alla sua scheda.">
-        <Suspense fallback={null}>
+        <Suspense fallback={<SearchFieldFallback placeholder="Cerca nel catalogo…" />}>
           <CatalogSearch />
         </Suspense>
       </PageHeader>

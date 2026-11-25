@@ -6,11 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { useEventClock } from "@/hooks/use-event-clock"
-import { EVENT_TYPES } from "@/lib/events.utils"
-
-const AXIS = ["00", "03", "06", "09", "12", "15", "18", "21", "24"]
-const TONE = { rift: "text-rift", nightmare: "text-nightmare" } as const
-const FILL = { rift: "bg-rift", nightmare: "bg-nightmare" } as const
+import { EVENT_AXIS as AXIS, EVENT_FILL as FILL, EVENT_TONE as TONE, EVENT_TYPES } from "@/lib/events.utils"
 
 export function EventBoard() {
   const e = useEventClock()

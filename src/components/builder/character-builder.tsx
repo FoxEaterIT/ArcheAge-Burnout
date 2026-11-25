@@ -1,23 +1,19 @@
 "use client"
 // Character Builder: classe, equipaggiamento, statistiche e rami abilità, salvati su questo dispositivo.
-import { useMemo } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { useCharacterBuild } from "@/hooks/use-character-build"
-import type { BuilderData, BuilderView } from "@/lib/builder.types"
-import { CLASSES } from "@/lib/builder.utils"
+import type { BuilderData } from "@/lib/builder.types"
+import { BUILDER_TABS as TABS, CLASSES } from "@/lib/builder.utils"
 import { ClassPicker } from "./class-picker"
 import { GearBoard } from "./gear-board"
 import { GearPicker } from "./gear-picker"
 import { StatsPanel } from "./stats-panel"
 import { TraitTree } from "./trait-tree"
 
-const TABS: [BuilderView, string][] = [["gear", "Equipaggiamento"], ["stats", "Statistiche"], ["traits", "Rami abilità"]]
-
 export function CharacterBuilder({ data }: { data: BuilderData }) {
   const cb = useCharacterBuild(data)
-  const pieces = useMemo(() => new Map(data.equipment.map((p) => [p.id, p])), [data.equipment])
   if (!cb.ready) return <p className="text-sm text-muted">Carico la build salvata…</p>
   if (cb.choosing) return <ClassPicker cb={cb} art={data.classArt} />
   return (
@@ -44,8 +40,8 @@ export function CharacterBuilder({ data }: { data: BuilderData }) {
       </nav>
       {cb.view === "gear" ? (
         <div className="grid items-start gap-4 lg:grid-cols-[minmax(0,1.08fr)_minmax(300px,0.92fr)]">
-          <GearBoard cb={cb} pieces={pieces} />
-          <GearPicker cb={cb} data={data} pieces={pieces} />
+          <GearBoard cb={cb} pieces={cb.pieces} />
+          <GearPicker cb={cb} data={data} pieces={cb.pieces} />
         </div>
       ) : cb.view === "stats" ? (
         <StatsPanel cb={cb} />

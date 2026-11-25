@@ -6,6 +6,7 @@ import { MapSearch } from "@/components/map/map-search"
 import { WorldMapLazy } from "@/components/map/world-map-lazy"
 import { ItemPositions } from "@/components/record/item-positions"
 import { PageHeader } from "@/components/shell/app-shell"
+import { SearchFieldFallback } from "@/components/ui/search-field-fallback"
 import { nameOf, searchMapItems, worldCatalog } from "@/lib/game-data.utils"
 import { buildRecord } from "@/lib/record.utils"
 import { recordHref } from "@/lib/trade.utils"
@@ -16,7 +17,7 @@ export default function MappaPage({ searchParams }: PageProps<"/mappa">) {
   return (
     <>
       <PageHeader title="Mappa di Auroria" description="Cerca un oggetto per vedere dove si raccoglie, chi lo rilascia e dove si consegna.">
-        <Suspense fallback={null}>
+        <Suspense fallback={<SearchFieldFallback label="Cerca un oggetto sulla mappa" placeholder="Es. Iron Ore" />}>
           <MapSearch />
         </Suspense>
       </PageHeader>
@@ -32,7 +33,7 @@ export default function MappaPage({ searchParams }: PageProps<"/mappa">) {
 async function MapBody({ searchParams }: Pick<PageProps<"/mappa">, "searchParams">) {
   const params = await searchParams
   const q = typeof params.q === "string" ? params.q : ""
-  const selected = typeof params.oggetto === "string" && worldCatalog[params.oggetto] ? params.oggetto : null
+  const selected = typeof params.oggetto === "string" && Object.hasOwn(worldCatalog, params.oggetto) ? params.oggetto : null
   const record = selected ? buildRecord(selected) : null
   const { rows, more } = selected ? { rows: [], more: false } : searchMapItems(q)
   return (
@@ -60,7 +61,7 @@ async function MapBody({ searchParams }: Pick<PageProps<"/mappa">, "searchParams
             <Link href={recordHref(record.id)} className="hover:text-gold">{nameOf(record.id)}</Link>
           </h2>
           {record.positions ? (
-            <ItemPositions section={record.positions} />
+            <ItemPositions key={record.id} section={record.positions} />
           ) : (
             <>
               <p className="text-sm text-ink-2">{record.positionsStatus ?? record.status ?? "Nessuna posizione di acquisizione verificata nelle fonti consultate."}</p>

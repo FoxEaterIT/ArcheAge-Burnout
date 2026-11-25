@@ -4,10 +4,7 @@ import Link from "next/link"
 import { CircleDot } from "lucide-react"
 import { cn } from "cn"
 import { useEventClock } from "@/hooks/use-event-clock"
-import { EVENT_TYPES } from "@/lib/events.utils"
-
-const TONE = { rift: "text-rift", nightmare: "text-nightmare" } as const
-const DOT = { rift: "bg-rift", nightmare: "bg-nightmare" } as const
+import { EVENT_FILL as DOT, EVENT_TONE as TONE, EVENT_TYPES } from "@/lib/events.utils"
 
 export function EventsRail() {
   const e = useEventClock()

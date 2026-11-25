@@ -56,12 +56,12 @@ export const levelOf = (id: string) => Number(gameItems[id]?.[3]) || 0
 
 /** Nome da mostrare per un id: catalogo, oggetti di gioco, oppure lo slug leggibile. */
 export function nameOf(id: string) {
-  return worldCatalog[id]?.[0] ?? gameItems[id]?.[0] ?? id.replaceAll("-", " ")
+  return (Object.hasOwn(worldCatalog, id) ? worldCatalog[id][0] : undefined) ?? (Object.hasOwn(gameItems, id) ? gameItems[id][0] : undefined) ?? id.replaceAll("-", " ")
 }
 
 /** Un id ha una scheda se compare in almeno una delle fonti che la scheda mostra. */
 export function hasRecord(id: string) {
-  return id in worldCatalog || id in gameItems || id in acquisition || id in dismantling || id in materialPoints
+  return [worldCatalog, gameItems, acquisition, dismantling, materialPoints].some((source) => Object.hasOwn(source, id))
 }
 
 /** Carico → id della sua scheda nel catalogo. */

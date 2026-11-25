@@ -2,12 +2,10 @@
 import Link from "next/link"
 import { GameText } from "@/components/game/game-text"
 import type { CargoGroup } from "@/lib/game.types"
-import { deliveryOnly, ingredients, multiplyIngredient } from "@/lib/text.utils"
-import { PACKS_PER_BATCH, recordHref, routeStops } from "@/lib/trade.utils"
+import { PACKS_PER_BATCH, recordHref } from "@/lib/trade.utils"
 import { RouteLine } from "./route-line"
 
 export function CargoCard({ group, recordId }: { group: CargoGroup; recordId?: string }) {
-  const onlyDelivery = deliveryOnly(group.recipe)
   return (
     <article className="flex min-w-0 flex-col gap-4 rounded-xl border border-line bg-surface p-5 [content-visibility:auto] [contain-intrinsic-size:auto_340px]">
       <div>
@@ -19,18 +17,18 @@ export function CargoCard({ group, recordId }: { group: CargoGroup; recordId?: s
           )}
         </h2>
         <p className="mt-2 flex flex-wrap gap-x-3 gap-y-1 text-xs text-muted">
-          <span className="sr-only">{onlyDelivery ? "Solo consegna: " : "Preparazione per 1 pacco: "}</span>
-          {ingredients(group.recipe).map((i) => <GameText key={i} text={i} size={16} />)}
+          <span className="sr-only">{group.deliveryOnly ? "Solo consegna: " : "Preparazione per 1 pacco: "}</span>
+          {group.ingredients.map((i) => <GameText key={i} text={i} size={16} />)}
         </p>
       </div>
-      <RouteLine origin={group.origin} stops={routeStops(group.routes)} />
-      {onlyDelivery ? (
+      <RouteLine origin={group.origin} stops={group.stops} />
+      {group.deliveryOnly ? (
         <p className="text-xs text-dim">Puoi consegnare i pacchi già posseduti.</p>
       ) : (
         <details className="group text-xs text-muted">
           <summary className="cursor-pointer select-none hover:text-ink">Totale per {PACKS_PER_BATCH} pacchi</summary>
           <p className="mt-2 flex flex-wrap gap-x-3 gap-y-1">
-            {ingredients(group.recipe).map((i) => <GameText key={i} text={multiplyIngredient(i, PACKS_PER_BATCH)} size={16} />)}
+            {group.batch.map((i) => <GameText key={i} text={i} size={16} />)}
           </p>
         </details>
       )}

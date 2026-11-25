@@ -1,6 +1,7 @@
 // Costruisce la scheda come `renderRecord` dell'originale: stesse sezioni, stesso ordine, stessi testi.
 import "server-only"
 import { firstCalculableTier } from "./craft.utils"
+import { samplePoints } from "./map.utils"
 import {
   acquisition, artOf, dismantling, gameItems, hasRecord, itemLocations, itemUses, lootSources, lunastoneRanges, materialPoints, nameOf, recipeBook, tradeRoutes, worldCatalog,
 } from "./game-data.utils"
@@ -49,9 +50,12 @@ function recipeModels(id: string): RecipeModel[] {
     const [result, profession, stations, tiers] = recipe
     const subTiers: Record<string, RecipeTier> = {}
     const ids = new Set<string>([result])
+    const labels = new Map<string, string>()
     const visit = (tier: RecipeTier) => {
-      for (const [child] of tier[1]) {
+      for (const [child, label] of tier[1]) {
         ids.add(child)
+        const dose = /^[0-9,]+\s*×\s*(.+)$/.exec(label)
+        if (dose && !labels.has(child)) labels.set(child, dose[1])
         if (child in subTiers) continue
         const next = firstCalculableTier(child, recipeBook)
         if (next) {
@@ -62,7 +66,8 @@ function recipeModels(id: string): RecipeModel[] {
     }
     tiers.forEach(visit)
     const entries: Record<string, EntryLink> = {}
-    for (const each of ids) entries[each] = link(each)
+    // Come l'originale: per gli id senza scheda il nome viene dalla dose della ricetta.
+    for (const each of ids) entries[each] = link(each, labels.get(each))
     return [{
       key,
       result,
@@ -83,7 +88,7 @@ function positionsSection(id: string): PositionsSection | null {
   const dewdrop = id === "evening-dewdrop"
   return {
     intro: dewdrop ? "Raccogli gli Evening Dew Bellflower a Diamond Shores, Gylden Ruins o Astron Plains. Anche i forzieri di Mailgrove, ad Astron Plains, possono contenerlo. I numeri sulla mappa indicano i sei fiori. Seleziona un punto per ingrandirlo." : null,
-    sources: sources.map(([label, key]) => ({ label, points: itemLocations.points[key] })),
+    sources: sources.map(([label, key]) => ({ label, points: samplePoints(itemLocations.points[key]), total: itemLocations.points[key].length })),
     defaultSource: Math.max(0, gathering),
     flowers: dewdrop,
   }

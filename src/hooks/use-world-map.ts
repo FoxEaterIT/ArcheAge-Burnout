@@ -1,6 +1,6 @@
 "use client"
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react"
-import index from "@/data/generated/map-index.json"
+import { MAP_INDEX } from "@/lib/client-data.utils"
 import type { MapViewport, Point } from "@/lib/game.types"
 import { MAP_RATIO, initialView, mapMarkers, maximumWidth, minimumWidth, visibleTiles } from "@/lib/map.utils"
 
@@ -12,6 +12,8 @@ export function useWorldMap(point: Point | null, overview: Point[], name: string
   const frameRef = useRef<HTMLDivElement>(null)
   const [view, setView] = useState<MapViewport>(EMPTY_VIEW)
   const pending = useRef<{ left: number; top: number } | null>(null)
+  // Conta i riposizionamenti: lo scorrimento va applicato anche quando la larghezza resta uguale (es. "Torna al punto").
+  const [jumps, setJumps] = useState(0)
   const frameQueued = useRef(false)
   const drag = useRef<[number, number, number, number] | null>(null)
 
@@ -36,6 +38,7 @@ export function useWorldMap(point: Point | null, overview: Point[], name: string
     const offset = Math.max(0, (f.clientWidth - width) / 2)
     pending.current = { left: center[0] * width + offset - anchor[0], top: center[1] * width * MAP_RATIO - anchor[1] }
     setView((v) => ({ ...v, width }))
+    setJumps((n) => n + 1)
   }, [limits])
 
   // Applica lo scorrimento dopo che il nuovo palco è stato disegnato alla nuova larghezza.
@@ -46,7 +49,7 @@ export function useWorldMap(point: Point | null, overview: Point[], name: string
     f.scrollTop = pending.current.top
     pending.current = null
     measure(view.width)
-  }, [view.width, measure])
+  }, [view.width, jumps, measure])
 
   const midpoint = (): [number, number] => {
     const f = frameRef.current!
@@ -123,7 +126,7 @@ export function useWorldMap(point: Point | null, overview: Point[], name: string
     if (event.key === "-") zoom(1 / ZOOM_STEP, midpoint())
   }
 
-  const { tiles } = useMemo(() => visibleTiles(view, index as Record<string, number[]>), [view])
+  const { tiles } = useMemo(() => visibleTiles(view, MAP_INDEX), [view])
   const markers = useMemo(() => mapMarkers(point, overview, name), [point, overview, name])
   const min = minimumWidth(view.clientWidth, view.clientHeight)
   const max = maximumWidth(min, view.dpr)

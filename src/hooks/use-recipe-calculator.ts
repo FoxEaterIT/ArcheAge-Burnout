@@ -1,6 +1,6 @@
 "use client"
 import { useMemo, useState } from "react"
-import { craftChain, planTier, validPieces } from "@/lib/craft.utils"
+import { craftChain, planSummary, planTier, validPieces } from "@/lib/craft.utils"
 import type { RecipeModel } from "@/lib/record.types"
 
 /** Livello scelto e pezzi desiderati di una ricetta, con il piano e la catena di produzione calcolati. */
@@ -15,5 +15,6 @@ export function useRecipeCalculator(recipe: RecipeModel) {
     () => (plan.calculable && valid ? craftChain(recipe.result, tier, requested, recipe.subTiers) : null),
     [plan.calculable, valid, recipe.result, recipe.subTiers, tier, requested],
   )
-  return { tierIndex, setTierIndex, pieces, setPieces, plan, valid, chain }
+  const entry = (id: string) => recipe.entries[id] ?? { id, name: id, art: null, href: null }
+  return { tierIndex, setTierIndex, pieces, setPieces, plan, summary: planSummary(plan), valid, chain, entry }
 }

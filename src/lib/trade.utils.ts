@@ -1,11 +1,8 @@
 // Icone dei commerci e collegamenti alle schede, usabili anche nei componenti client (dati piccoli).
-import icons from "@/data/generated/trade-icons.json"
-import links from "@/data/generated/trade-links.json"
+import { TRADE_ICONS, TRADE_LINKS } from "./client-data.utils"
 import type { CargoGroup, RouteStop, Segment, TradeFilters, TradeRoute } from "./game.types"
-import { goldValue, rewardName } from "./text.utils"
+import { deliveryOnly, goldValue, ingredients, multiplyIngredient, rewardName } from "./text.utils"
 
-export const TRADE_ICONS = icons as Record<string, string>
-export const TRADE_LINKS = links as Record<string, string>
 const names = Object.keys(TRADE_ICONS).sort((a, b) => b.length - a.length)
 
 /** Divide un testo nei nomi di gioco riconosciuti (con icona e scheda) e nel testo libero tra uno e l'altro. */
@@ -62,9 +59,14 @@ export function groupRoutes(routes: TradeRoute[]): CargoGroup[] {
   for (const r of routes) {
     const key = r.origin + "|" + r.cargo
     let group = groups.get(key)
-    if (!group) groups.set(key, (group = { origin: r.origin, cargo: r.cargo, recipe: r.recipe, routes: [] }))
+    if (!group) {
+      const parts = ingredients(r.recipe)
+      group = { origin: r.origin, cargo: r.cargo, recipe: r.recipe, routes: [], stops: [], ingredients: parts, batch: parts.map((i) => multiplyIngredient(i, PACKS_PER_BATCH)), deliveryOnly: deliveryOnly(r.recipe) }
+      groups.set(key, group)
+    }
     group.routes.push(r)
   }
+  for (const group of groups.values()) group.stops = routeStops(group.routes)
   return [...groups.values()]
 }
 

@@ -1,24 +1,16 @@
 "use client"
-import { useState } from "react"
-import { useCatalogNavigation } from "./use-catalog-navigation"
-import { useDebouncedCallback } from "./use-debounced-callback"
+import { useSearchParam } from "./use-search-param"
 
-/** Campo di ricerca del catalogo: risponde subito alla digitazione e aggiorna l'URL dopo una breve pausa. */
+const FILTER_KEYS = ["q", "tipo", "categoria", "rarita", "tutte"]
+
+/** Ricerca del catalogo: "Azzera" toglie ricerca e filtri e torna alla home del catalogo. */
 export function useCatalogSearch() {
-  const { params, update, pending } = useCatalogNavigation()
-  const [value, setValue] = useState(params.get("q") ?? "")
-  const push = useDebouncedCallback((q: string) => update({ q: q.trim() }), 250)
+  const search = useSearchParam("q")
   return {
-    value,
-    pending,
-    onChange: (q: string) => {
-      setValue(q)
-      push(q)
-    },
-    clear: () => {
-      setValue("")
-      update({ q: "", tipo: "", categoria: "", rarita: "", ordine: "" })
-    },
-    hasFilters: ["q", "tipo", "categoria", "rarita"].some((k) => params.get(k)),
+    value: search.value,
+    pending: search.pending,
+    onChange: search.onChange,
+    clear: () => search.reset({ q: "", tipo: "", categoria: "", rarita: "", ordine: "", tutte: "" }),
+    hasFilters: FILTER_KEYS.some((k) => search.params.get(k)),
   }
 }

@@ -10,8 +10,9 @@ export function ItemPositions({ section }: { section: PositionsSection }) {
   return (
     <div className="space-y-2">
       {section.intro ? <p className="text-sm text-ink-2">{section.intro}</p> : null}
-      <GameSelect label="Fonte del materiale" value={String(p.source)} onChange={(v) => p.setSource(Number(v))} options={section.sources.map((s, i) => ({ value: String(i), label: `${s.label} (${s.points.length})` }))} />
-      {p.points.length > 1 ? (
+      <GameSelect label="Fonte del materiale" value={String(p.source)} onChange={(v) => p.setSource(Number(v))} options={section.sources.map((s, i) => ({ value: String(i), label: `${s.label} (${s.total})` }))} />
+      {p.sampled ? <p className="text-xs text-muted">{p.sampled}</p> : null}
+      {p.listed ? (
         <GameSelect label="Posizione della fonte" value={p.spot} onChange={p.setSpot} options={p.spotOptions} />
       ) : null}
       <WorldMapLazy key={`${p.source}-${p.spot}`} point={p.point} overview={p.overview} name={p.label} />

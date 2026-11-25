@@ -31,7 +31,7 @@ Risposte in chat: stile della skill `caveman` (`.agents/skills/caveman/SKILL.md`
 - Si usa pnpm. Mai npm o yarn.
 - Prima di ogni merge, controllo del branch intero (`git diff main...<branch>`) con un `code-reviewer`: qualità, performance, bug. Si correggono i problemi, ognuno con il suo test quando è un bug, e si rilanciano le prove.
 - Design: si parte da `impeccable`. Contesto di prodotto e stile stanno in `PRODUCT.md` e `DESIGN.md` in radice, da creare con `/impeccable init` e `/impeccable document`. `design-taste-frontend` e `high-end-visual-design` alzano la qualità visiva; gli agent `impeccable-*` servono per asset, documentazione dello stile e revisione finale.
-- Consumo di token (abbonamenti Pro): la sessione gira su Sonnet con effort medium (`.claude/settings.json`); Opus con effort high solo per piani grandi, architettura e la review del branch prima del merge. I subagent si lanciano sempre con `model` ed `effort` espliciti: `implementer`, `debugger`, `test-engineer`, `doc-writer`, `git-master`, `designer`, `Explore` su Sonnet medium. Superpowers è spento in questo progetto: come riaccenderlo è in `CLAUDE.md`.
+- Consumo di token (abbonamenti Pro): sessione su Sonnet medium (`.claude/settings.json`); Opus high solo per piani grandi, architettura e review del branch. Subagent sempre con `model` ed `effort` espliciti. Superpowers è spento: come riaccenderlo è in `CLAUDE.md`.
 
 <!-- kit:section stack -->
 ## Stack e cartelle
@@ -40,7 +40,7 @@ Next.js 16 (App Router, `src/`) + React 19 + TypeScript. UI: Tailwind CSS v4 e s
 
 - `src/app/`: route. `next.config.ts` ha `cacheComponents` e `partialPrefetching` accesi (default di Next 16.4): per cache e prefetch valgono le skill `next-cache-components-*` e `next-partial-prefetching-*`.
 - `src/components/ui/`: componenti shadcn (`pnpm dlx shadcn@latest add <nome>`), si possono modificare segnando le modifiche con `Burnout:`. `cn` arriva dal pacchetto `cn` di shadcn, non da `clsx` + `tailwind-merge`.
-- `src/lib/`: logica pura da testare (rotte, ricette, orari degli eventi, statistiche del builder). `game-data.utils.ts` è l'unico accesso ai JSON di `src/data/generated/` ed è `server-only`: ai componenti client passa solo il sottoinsieme che serve.
+- `src/lib/`: logica pura da testare (rotte, ricette, orari degli eventi, statistiche del builder). I JSON di `src/data/generated/` si leggono solo da `game-data.utils.ts` (`server-only`, ai client passa il sottoinsieme che serve) e, per i tre piccoli usati nel browser (icone, collegamenti, indice delle tile), da `client-data.utils.ts`. Scheda inesistente: pagina 404 con stato 200, perché `notFound()` arriva dentro `<Suspense>`.
 - `src/hooks/`: custom hook (`use-*.ts`), uno per file.
 - `e2e/`: test Playwright.
 
@@ -62,18 +62,18 @@ Convenzioni dei file (2026-11-25, decise dal proprietario):
 | radice | `pnpm build` | build di produzione |
 | radice | `pnpm test:e2e` | Playwright con Google Chrome installato, a 1440 e 390 px; riusa il `pnpm dev` sulla porta 3000 se è già aperto |
 
-Dopo ogni modifica: `pnpm typecheck`, `pnpm lint`, `pnpm test`. Ogni sezione portata ha un test che confronta i suoi dati e calcoli con l'originale, e un test e2e del percorso principale.
+Dopo ogni modifica: `pnpm typecheck`, `pnpm lint`, `pnpm test`. Ogni sezione ha test della sua logica sui dati veri e un e2e del percorso principale.
 
 <!-- kit:section roles -->
 ## Ruoli e dati sensibili
 
-Nessun login, nessun ruolo, nessun dato personale: solo dati di gioco. Le build del character builder restano nel browser (`localStorage`, nell'originale chiavi `burnout-character-v1` e `burnout-draft-<archetipo>`).
+Nessun login, nessun ruolo, nessun dato personale: solo dati di gioco. Le build del character builder restano nel browser (`localStorage`, chiavi `burnout-build-v1` e `burnout-build-v1-draft-<classe>`; quelle dell'originale, `burnout-character-v1`, vivevano su `file://` e non si possono recuperare).
 
 <!-- kit:section domain -->
 ## Regole di dominio
 
 - Eventi: gli orari in `eventTypes` sono ore UTC che si ripetono ogni giorno (le mezze ore come `3.5`), con durata in minuti. L'interfaccia li mostra nell'ora di Roma (`Europe/Rome`) e nell'ora del PC; l'export `.ics` usa UTC con `RRULE:FREQ=DAILY`. I test fissano l'istante e girano con `TZ=UTC`; skill `dates-and-time-zones`.
-- Oro e quantità: nell'originale le stringhe sono in formato inglese (`41,067 Gold`). Nei dati diventano numeri interi; a schermo si formattano `it-IT`.
+- Oro e quantità: nei dati restano stringhe in formato inglese (`41,067 Gold`), convertite in numeri solo per i calcoli (`goldValue`, `craft.utils.ts`); a schermo si formattano `it-IT` con il separatore delle migliaia sempre presente.
 - Un prezzo marcato "da verificare al banco" o un pacco "non più craftabile" resta segnalato come tale, mai stimato.
 
 <!-- kit:section integrations -->

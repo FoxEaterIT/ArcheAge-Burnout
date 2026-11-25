@@ -35,6 +35,7 @@ export function useCharacterBuild(data: BuilderData) {
   const b = build ?? EMPTY_BUILD
   const branch = branchChoice && b.archetype && (CLASSES[b.archetype] as readonly string[]).includes(branchChoice) ? branchChoice : b.archetype ? CLASSES[b.archetype][0] : ""
   const names = useMemo(() => pieceName(data.equipment), [data.equipment])
+  const pieces = useMemo(() => new Map(data.equipment.map((p) => [p.id, p])), [data.equipment])
   const stats = useMemo(() => readings(b, data, names), [b, data, names])
   const options = useMemo(() => gearOptions(b, slot, search, classOnly, data), [b, slot, search, classOnly, data])
   const layout = useMemo(() => traitLayout(b, branch, data), [b, branch, data])
@@ -43,6 +44,7 @@ export function useCharacterBuild(data: BuilderData) {
 
   return {
     ready: build !== null,
+    pieces,
     build: b,
     status,
     choosing: choosing || (build !== null && !b.archetype),

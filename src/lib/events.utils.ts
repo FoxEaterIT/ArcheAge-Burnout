@@ -75,3 +75,8 @@ export function eventCalendar(stamp: string) {
 }
 
 export const icsStamp = (now: number) => new Date(now).toISOString().replace(/[-:]/g, "").replace(/\.\d{3}/, "")
+
+/** Etichette dell'asse delle 24 ore e colori di testo, riempimento e punto per famiglia di evento. */
+export const EVENT_AXIS = ["00", "03", "06", "09", "12", "15", "18", "21", "24"]
+export const EVENT_TONE = { rift: "text-rift", nightmare: "text-nightmare" } as const
+export const EVENT_FILL = { rift: "bg-rift", nightmare: "bg-nightmare" } as const

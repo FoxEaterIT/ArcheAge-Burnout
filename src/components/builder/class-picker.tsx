@@ -1,7 +1,8 @@
 // Scelta della classe: le quattro classi con le loro armi.
 import { cn } from "cn"
 import { GameIcon } from "@/components/game/game-icon"
-import type { CharacterBuild, BuilderData } from "@/lib/builder.types"
+import type { CharacterBuild } from "@/hooks/character-build.types"
+import type { BuilderData } from "@/lib/builder.types"
 import { CLASSES, CLASS_NAMES } from "@/lib/builder.utils"
 
 export function ClassPicker({ cb, art }: { cb: CharacterBuild; art: BuilderData["classArt"] }) {

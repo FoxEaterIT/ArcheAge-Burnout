@@ -27,7 +27,8 @@ export type Segment = string | { name: string; icon: string; href: string | null
 
 export type RewardKind = "" | "item" | "gold"
 export type TradeFilters = { target: string; query: string; origin: string; destination: string; kind: RewardKind }
-export type CargoGroup = { origin: string; cargo: string; recipe: string; routes: TradeRoute[] }
+/** Carico pronto da disegnare: fermate della linea, ingredienti per 1 pacco e per un lotto. */
+export type CargoGroup = { origin: string; cargo: string; recipe: string; routes: TradeRoute[]; stops: RouteStop[]; ingredients: string[]; batch: string[]; deliveryOnly: boolean }
 /** Fermata della linea: destinazione, ricompensa, oro se è oro, `best` se è il ricavo più alto in oro. */
 export type RouteStop = { destination: string; payout: string; gold: number | null; best: boolean }
 
@@ -46,7 +47,7 @@ export type MapViewport = { width: number; dpr: number; scrollLeft: number; scro
 export type MapTile = { key: string; src: string; left: number; top: number; size: number }
 export type MapMarker = { key: string; left: number; top: number; label: string; title: string; kind: "point" | "pin" | "dot" }
 /** Fonte di un oggetto sulla mappa: etichetta e punti. */
-export type MapSource = { label: string; points: Point[] }
+export type MapSource = { label: string; points: Point[]; total: number }
 
 export type EventType = { key: string; title: string; hours: number[]; duration: number; family: "rift" | "nightmare" }
 export type EventState = { key: string; title: string; family: EventType["family"]; active: boolean; status: string; countdown: string; local: string; note: string }

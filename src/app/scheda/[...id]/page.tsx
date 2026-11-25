@@ -5,7 +5,8 @@ import { RecordView } from "@/components/record/record-view"
 import { nameOf, hasRecord } from "@/lib/game-data.utils"
 import { buildRecord } from "@/lib/record.utils"
 
-const recordId = (segments: string[]) => segments.map(decodeURIComponent).join("/")
+// Next passa i segmenti già decodificati.
+const recordId = (segments: string[]) => segments.join("/")
 
 export async function generateMetadata({ params }: PageProps<"/scheda/[...id]">): Promise<Metadata> {
   const id = recordId((await params).id)

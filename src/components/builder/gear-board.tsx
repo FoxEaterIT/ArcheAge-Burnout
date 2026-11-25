@@ -1,7 +1,8 @@
 // Slot dell'equipaggiamento divisi per gruppo, con il riepilogo dei bonus.
 import { GameGlyph } from "@/components/game/game-glyph"
 import { GameIcon } from "@/components/game/game-icon"
-import type { CharacterBuild, GearPiece } from "@/lib/builder.types"
+import type { CharacterBuild } from "@/hooks/character-build.types"
+import type { GearPiece } from "@/lib/builder.types"
 import { BUILD_SLOTS, SLOT_GLYPHS, SLOT_GROUPS, formatStat } from "@/lib/builder.utils"
 
 export function GearBoard({ cb, pieces }: { cb: CharacterBuild; pieces: Map<string, GearPiece> }) {

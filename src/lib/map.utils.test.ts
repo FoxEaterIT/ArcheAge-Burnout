@@ -21,3 +21,14 @@ describe("mappa", () => {
     expect(mapMarkers(null, Array.from({ length: 51 }, () => [0, 0]), "x")[0].kind).toBe("dot")
   })
 })
+
+describe("fonti molto grandi", () => {
+  it("si campionano a 2.000 punti mantenendo l'ordine", async () => {
+    const { samplePoints } = await import("./map.utils")
+    const many = Array.from({ length: 101_598 }, (_, i) => [i, i] as [number, number])
+    const sample = samplePoints(many)
+    expect(sample).toHaveLength(2000)
+    expect(sample[0]).toEqual([0, 0])
+    expect(sample.every((p, i) => i === 0 || p[0] > sample[i - 1][0])).toBe(true)
+  })
+})

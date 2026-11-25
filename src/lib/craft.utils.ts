@@ -1,10 +1,12 @@
 // Calcolatore delle ricette e catena di produzione, con le regole di `appendRecipes` e `appendCraftChain` dell'originale.
 import type { ChainStep, CraftChain, RecipeTier, TierPlan } from "./game.types"
+import { fmt } from "./text.utils"
 
 const DOSE = /^([0-9,]+)\s*×\s*(.+)$/
 const GOLD_COST = /^[0-9,]+ Gold$/
 const num = (s: string) => Number(s.replaceAll(",", ""))
 export const MAX_PIECES = 1_000_000
+export const CALC_PRESETS = [1, 2, 3]
 
 /** Una ricetta è calcolabile se ogni ingrediente ha una dose "N × Nome". */
 export const isCalculable = (tier: RecipeTier) => tier[1].length > 0 && tier[1].every(([, label]) => DOSE.test(label))
@@ -77,3 +79,16 @@ export function craftChain(result: string, rootTier: RecipeTier, requested: numb
   const raw = [...needed].filter(([id]) => !tiers.has(id)).map(([id, count]) => ({ id, count }))
   return { cycle: false, steps, raw, gold }
 }
+
+/** Riga di riepilogo del calcolatore: lavorazioni, pezzi, eccedenza, oro. */
+export function planSummary(plan: TierPlan) {
+  if (!plan.calculable) return "Dosi per lavorazione non disponibili per questa ricetta."
+  return [
+    `${fmt(plan.batches)} ${plan.batches === 1 ? "lavorazione" : "lavorazioni"}`,
+    `${fmt(plan.produced)} ${plan.produced === 1 ? "pezzo prodotto" : "pezzi prodotti"}`,
+    plan.surplus > 0 ? `${fmt(plan.surplus)} in eccedenza` : null,
+    plan.gold !== null ? `${fmt(plan.gold)} oro` : null,
+  ].filter(Boolean).join(" · ")
+}
+
+export const batchesLabel = (n: number) => `${fmt(n)} ${n === 1 ? "lavorazione" : "lavorazioni"}`

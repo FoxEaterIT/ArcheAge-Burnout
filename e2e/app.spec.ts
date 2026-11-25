@@ -86,3 +86,19 @@ test("builder: classe, pezzo e salvataggio", async ({ page }) => {
   await expect(page.getByText("Physical DEF").first()).toBeVisible()
   await expectNoHorizontalScroll(page)
 })
+
+test("catalogo: il campo di ricerca segue l'URL quando cambi categoria", async ({ page, isMobile }) => {
+  test.skip(isMobile, "la barra delle categorie è solo su desktop")
+  await page.goto("/catalogo")
+  const field = page.getByLabel("Cerca nel catalogo")
+  await field.fill("iron")
+  await expect(page).toHaveURL(/q=iron/)
+  await page.getByRole("navigation", { name: "Categorie" }).getByRole("link", { name: "Armi" }).click()
+  await expect(page).toHaveURL(/tipo=Armi$/)
+  await expect(field).toHaveValue("")
+})
+
+test("una scheda inesistente mostra la pagina non trovata", async ({ page }) => {
+  await page.goto("/scheda/constructor")
+  await expect(page.getByRole("heading", { name: "Questa pagina non c’è" })).toBeVisible()
+})

@@ -1,5 +1,5 @@
 // Regole del Character Builder dell'originale: classi, punti attributo, statistiche dei pezzi, tempra, tratti.
-import type { Build, BuildSlot, BuilderData, ClassName, GearOption, GearPiece, Readings, SlotKey, SlotType, Stats, TraitLayout } from "./builder.types"
+import type { Build, BuildSlot, BuilderData, BuilderView, ClassName, GearOption, GearPiece, Readings, SlotKey, SlotType, Stats, TraitLayout } from "./builder.types"
 import { fmtDecimal } from "./text.utils"
 
 export const BUILD_KEY = "burnout-build-v1"
@@ -23,6 +23,8 @@ export const STARTING_STATS: Record<ClassName, number[]> = {
 }
 export const MAX_LEVEL = 40
 export const pointsForLevel = (level: number) => 3 * (level - 1)
+export const LEVELS = Array.from({ length: MAX_LEVEL }, (_, i) => i + 1)
+export const BUILDER_TABS: [BuilderView, string][] = [["gear", "Equipaggiamento"], ["stats", "Statistiche"], ["traits", "Rami abilità"]]
 
 export const BUILD_SLOTS: BuildSlot[] = [
   { key: "primary", label: "Arma principale", type: "Weapon" },

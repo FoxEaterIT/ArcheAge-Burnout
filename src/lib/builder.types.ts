@@ -1,5 +1,3 @@
-import type { useCharacterBuild } from "@/hooks/use-character-build"
-
 // Character Builder: build salvata, pezzi, statistiche e albero dei tratti.
 
 export type ClassName = "Warrior" | "Ranger" | "Berserker" | "Mage"
@@ -47,5 +45,3 @@ export type TraitNode = { id: string; name: string; group: string; points: numbe
 export type TraitLayout = { headings: { label: string; y: number }[]; nodes: TraitNode[]; lines: { x1: number; y1: number; x2: number; y2: number }[]; height: number }
 
 export type BuilderView = "gear" | "stats" | "traits"
-/** Stato e azioni del Character Builder, come li restituisce `useCharacterBuild`. */
-export type CharacterBuild = ReturnType<typeof useCharacterBuild>

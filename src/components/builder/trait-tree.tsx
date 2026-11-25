@@ -5,7 +5,8 @@ import { cn } from "cn"
 import { Button } from "@/components/ui/button"
 import { GameIcon } from "@/components/game/game-icon"
 import { useDragScroll } from "@/hooks/use-drag-scroll"
-import type { BuilderData, CharacterBuild } from "@/lib/builder.types"
+import type { CharacterBuild } from "@/hooks/character-build.types"
+import type { BuilderData } from "@/lib/builder.types"
 import { CLASSES, traitLocked, treeGroupLabel } from "@/lib/builder.utils"
 
 export function TraitTree({ cb, data }: { cb: CharacterBuild; data: BuilderData }) {

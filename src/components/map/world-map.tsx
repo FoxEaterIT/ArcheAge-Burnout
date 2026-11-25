@@ -24,6 +24,7 @@ export function WorldMap({ point = null, overview = NO_POINTS, name, className }
       <div
         ref={frameRef}
         tabIndex={0}
+        role="region"
         aria-label="Mappa di Auroria. Trascina per spostarti, rotella o + e − per lo zoom."
         onScroll={map.onScroll}
         onKeyDown={map.onKeyDown}

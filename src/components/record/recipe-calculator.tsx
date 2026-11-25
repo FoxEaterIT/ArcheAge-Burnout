@@ -7,14 +7,12 @@ import { Label } from "@/components/ui/label"
 import { useRecipeCalculator } from "@/hooks/use-recipe-calculator"
 import type { CraftChain } from "@/lib/game.types"
 import type { EntryLink as Entry, RecipeModel } from "@/lib/record.types"
+import { CALC_PRESETS, batchesLabel } from "@/lib/craft.utils"
 import { fmt } from "@/lib/text.utils"
 import { EntryLink } from "./entry-link"
 
-const PRESETS = [1, 2, 3]
-
 export function RecipeCalculator({ recipe }: { recipe: RecipeModel }) {
-  const { tierIndex, setTierIndex, pieces, setPieces, plan, valid, chain } = useRecipeCalculator(recipe)
-  const entry = (id: string) => recipe.entries[id] ?? { id, name: id, art: null, href: null }
+  const { tierIndex, setTierIndex, pieces, setPieces, plan, summary, valid, chain, entry } = useRecipeCalculator(recipe)
   return (
     <div className="space-y-4 rounded-xl border border-line bg-bg p-4">
       <h3 className="font-display text-lg">{recipe.title}</h3>
@@ -33,7 +31,7 @@ export function RecipeCalculator({ recipe }: { recipe: RecipeModel }) {
               <Label htmlFor={recipe.key + "-qty"}>Pezzi desiderati</Label>
               <Input id={recipe.key + "-qty"} type="number" min={1} max={1000000} step={1} inputMode="numeric" value={pieces} onChange={(e) => setPieces(e.target.value)} className="h-9 w-32 tabular-nums" />
             </div>
-            {PRESETS.map((n) => (
+            {CALC_PRESETS.map((n) => (
               <Button key={n} variant="outline" className="h-9 min-w-9" aria-label={`Calcola per ${n} pezzi`} onClick={() => setPieces(String(n))}>{n}</Button>
             ))}
           </>
@@ -43,20 +41,11 @@ export function RecipeCalculator({ recipe }: { recipe: RecipeModel }) {
         <p role="alert" className="text-sm text-loss">Inserisci un numero intero da 1 a 1.000.000.</p>
       ) : (
         <>
-          <p className="text-sm text-ink-2">
-            {plan.calculable
-              ? [
-                  `${fmt(plan.batches)} ${plan.batches === 1 ? "lavorazione" : "lavorazioni"}`,
-                  `${fmt(plan.produced)} ${plan.produced === 1 ? "pezzo prodotto" : "pezzi prodotti"}`,
-                  plan.surplus > 0 ? `${fmt(plan.surplus)} in eccedenza` : null,
-                  plan.gold !== null ? `${fmt(plan.gold)} oro` : null,
-                ].filter(Boolean).join(" · ")
-              : "Dosi per lavorazione non disponibili per questa ricetta."}
-          </p>
+          <p className="text-sm text-ink-2">{summary}</p>
           {plan.materials.length ? (
             <ul className="grid gap-1.5 sm:grid-cols-[repeat(auto-fill,minmax(230px,1fr))]">
-              {plan.materials.map((m) => (
-                <li key={m.id} className="rounded-lg border border-line bg-surface px-3 py-2 text-sm">
+              {plan.materials.map((m, i) => (
+                <li key={m.id + i} className="rounded-lg border border-line bg-surface px-3 py-2 text-sm">
                   <EntryLink entry={entry(m.id)} label={m.count !== null ? `${fmt(m.count)} × ${m.label}` : m.label} />
                 </li>
               ))}
@@ -83,19 +72,19 @@ function CraftChainView({ chain, entry }: { chain: CraftChain; entry: (id: strin
             <span aria-hidden className={i === chain.steps.length - 1 ? "absolute top-4 -left-[23px] size-[13px] rounded-full border-2 border-gold bg-gold shadow-[0_0_10px_var(--gold)]" : "absolute top-4 -left-[23px] size-[13px] rounded-full border-2 border-line-strong bg-bg"} />
             <div className="flex flex-wrap items-center justify-between gap-2">
               <span className="font-medium"><EntryLink entry={entry(step.id)} label={`${fmt(step.needed)} × ${entry(step.id).name}`} /></span>
-              <span className="text-xs text-muted">{[step.level, `${fmt(step.batches)} ${step.batches === 1 ? "lavorazione" : "lavorazioni"}`].filter(Boolean).join(" · ")}</span>
+              <span className="text-xs text-muted">{step.level ? step.level + " · " : ""}{batchesLabel(step.batches)}</span>
             </div>
             <div className="mt-2 flex flex-wrap gap-x-4 gap-y-1.5 border-t border-line pt-2 text-sm text-ink-2">
               <span className="sr-only">Ingredienti:</span>
-              {step.parts.map((p) => <EntryLink key={p.id} entry={entry(p.id)} label={`${fmt(p.count)} × ${entry(p.id).name}`} size={22} />)}
+              {step.parts.map((p, j) => <EntryLink key={p.id + j} entry={entry(p.id)} label={`${fmt(p.count)} × ${entry(p.id).name}`} size={22} />)}
             </div>
           </li>
         ))}
       </ol>
       <h4 className="font-display text-base">Materiali da procurare</h4>
       <ul className="grid gap-1.5 sm:grid-cols-[repeat(auto-fill,minmax(230px,1fr))]">
-        {chain.raw.map((m) => (
-          <li key={m.id} className="rounded-lg border border-line bg-surface px-3 py-2 text-sm"><EntryLink entry={entry(m.id)} label={`${fmt(m.count)} × ${entry(m.id).name}`} /></li>
+        {chain.raw.map((m, i) => (
+          <li key={m.id + i} className="rounded-lg border border-line bg-surface px-3 py-2 text-sm"><EntryLink entry={entry(m.id)} label={`${fmt(m.count)} × ${entry(m.id).name}`} /></li>
         ))}
       </ul>
       <p className="text-sm text-ink-2">Oro delle lavorazioni con costo noto · <span className="tabular-nums text-gold">{fmt(chain.gold)}</span></p>
