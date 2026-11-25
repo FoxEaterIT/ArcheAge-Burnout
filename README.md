@@ -42,3 +42,7 @@ Come è fatto l'originale e dove sta ogni dato: [`docs/porting.md`](docs/porting
 ### Agenti AI
 
 Regole per gli agenti in [`AGENTS.md`](AGENTS.md) (Claude Code lo legge da `CLAUDE.md`). Agenti e skill vengono dal kit di `andmils-claude-skills`: si aggiornano con `node ~/.claude-sync/kit/install.mjs` dalla radice del progetto. Contesto di prodotto e direzione grafica per la skill `impeccable` in `PRODUCT.md`, `DESIGN.md` e `.impeccable/`.
+
+## Licenza
+
+Il codice è distribuito con licenza MIT (vedi [`LICENSE`](LICENSE)). Nomi, immagini, icone, mappa e dati di ArcheAge Chronicles appartengono a XLGames e ai rispettivi titolari: sono inclusi solo come riferimento per i giocatori e la licenza MIT non li copre. ArcheAge Burnout è un progetto non ufficiale della gilda, non affiliato né approvato da XLGames.
