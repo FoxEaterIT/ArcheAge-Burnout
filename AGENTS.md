@@ -84,7 +84,7 @@ Nessuna. L'app funziona con i soli dati inclusi; niente chiamate a server di gio
 <!-- kit:section style -->
 ## Stile grafico
 
-L'originale: tema scuro "pergamena e oro" (fondo `#191817`, inchiostro `#e5dcc6`, oro `#dbc393`, linee `#625644`), titoli Georgia, testo Segoe UI, angoli vivi, bordi doppi. Fino a `DESIGN.md` vale come riferimento; dopo, vince `DESIGN.md`. Tono: italiano semplice, da compagno di gilda.
+`DESIGN.md` (con `.impeccable/design.json`) è la fonte: palette di ArcheAge Chronicles in `src/app/globals.css`, solo tema scuro, titoli Marcellus e testo Noto Sans, la linea di Auroria come segno della casa. Direzione e contratto in `.impeccable/surfaces/src-app.md`. Tono: italiano semplice, da compagno di gilda.
 
 <!-- BEGIN:kit -->
 ## How we work

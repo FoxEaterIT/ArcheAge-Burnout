@@ -1,0 +1,467 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-25T19:56:08.848Z",
+  "title": "Design System: ArcheAge Burnout",
+  "extensions": {
+    "colorMeta": {
+      "bg": {
+        "role": "neutral",
+        "displayName": "Notte di Zinco",
+        "canonical": "#09090b",
+        "tonalRamp": [
+          "#0b0b0c",
+          "#262628",
+          "#454547",
+          "#666668",
+          "#89898c",
+          "#adaeb0",
+          "#cdcdcf",
+          "#eeeeef"
+        ]
+      },
+      "surface": {
+        "role": "neutral",
+        "displayName": "Lastra",
+        "canonical": "#141416",
+        "tonalRamp": [
+          "#0b0b0c",
+          "#262628",
+          "#454547",
+          "#666668",
+          "#89898b",
+          "#aeaeb0",
+          "#cdcdcf",
+          "#eeeeef"
+        ]
+      },
+      "raised": {
+        "role": "neutral",
+        "displayName": "Lastra Sollevata",
+        "canonical": "#1c1c20",
+        "tonalRamp": [
+          "#0b0b0d",
+          "#26262a",
+          "#444449",
+          "#65656a",
+          "#88888e",
+          "#adadb2",
+          "#cdcdd0",
+          "#eeeeef"
+        ]
+      },
+      "line": {
+        "role": "neutral",
+        "displayName": "Filo",
+        "canonical": "#27272a",
+        "tonalRamp": [
+          "#0b0b0c",
+          "#262629",
+          "#454548",
+          "#666669",
+          "#89898c",
+          "#adadb1",
+          "#cdcdcf",
+          "#eeeeef"
+        ]
+      },
+      "line-strong": {
+        "role": "neutral",
+        "displayName": "Filo Forte",
+        "canonical": "#3f3f46",
+        "tonalRamp": [
+          "#0b0b0e",
+          "#26262b",
+          "#44444b",
+          "#65656d",
+          "#888890",
+          "#adadb4",
+          "#cdcdd2",
+          "#eeeef0"
+        ]
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "Inchiostro",
+        "canonical": "#f4f4f5",
+        "tonalRamp": [
+          "#0b0b0b",
+          "#262627",
+          "#454546",
+          "#666667",
+          "#89898a",
+          "#aeaeae",
+          "#cdcdce",
+          "#eeeeee"
+        ]
+      },
+      "ink-2": {
+        "role": "neutral",
+        "displayName": "Inchiostro Secondario",
+        "canonical": "#d4d4d8",
+        "tonalRamp": [
+          "#0b0b0c",
+          "#262629",
+          "#454548",
+          "#666669",
+          "#89898c",
+          "#adadb1",
+          "#cdcdcf",
+          "#eeeeef"
+        ]
+      },
+      "muted": {
+        "role": "neutral",
+        "displayName": "Grigio Fumo",
+        "canonical": "#a1a1aa",
+        "tonalRamp": [
+          "#0b0b0e",
+          "#26262c",
+          "#44444c",
+          "#65656d",
+          "#888891",
+          "#adadb4",
+          "#cdcdd2",
+          "#eeeef0"
+        ]
+      },
+      "dim": {
+        "role": "neutral",
+        "displayName": "Grigio Spento",
+        "canonical": "#8a8a94",
+        "tonalRamp": [
+          "#0b0b0e",
+          "#26262d",
+          "#44444d",
+          "#65656e",
+          "#888892",
+          "#adadb5",
+          "#cdcdd3",
+          "#eeeef0"
+        ]
+      },
+      "gold": {
+        "role": "primary",
+        "displayName": "Oro Chiaro d'Ambra",
+        "canonical": "#fee685",
+        "tonalRamp": [
+          "#130900",
+          "#362300",
+          "#594200",
+          "#7b6400",
+          "#9f881e",
+          "#c0ae63",
+          "#dacea0",
+          "#f3efdf"
+        ]
+      },
+      "gold-strong": {
+        "role": "primary",
+        "displayName": "Oro Pieno",
+        "canonical": "#ffd230",
+        "tonalRamp": [
+          "#180600",
+          "#401d00",
+          "#653b00",
+          "#895e00",
+          "#ae8300",
+          "#cdaa33",
+          "#e2cd8a",
+          "#f6eed8"
+        ]
+      },
+      "on-gold": {
+        "role": "neutral",
+        "displayName": "Testo su Oro",
+        "canonical": "#18181b",
+        "tonalRamp": [
+          "#0b0b0c",
+          "#262629",
+          "#454548",
+          "#666669",
+          "#89898d",
+          "#adadb1",
+          "#cdcdd0",
+          "#eeeeef"
+        ]
+      },
+      "copper": {
+        "role": "secondary",
+        "displayName": "Rame",
+        "canonical": "oklab(0.555 0.107 0.123)",
+        "tonalRamp": [
+          "#230000",
+          "#550000",
+          "#831400",
+          "#ab3e00",
+          "#d46427",
+          "#f19266",
+          "#fcbda1",
+          "#ffe9df"
+        ]
+      },
+      "rift": {
+        "role": "secondary",
+        "displayName": "Corallo del Rift",
+        "canonical": "#ff8a73",
+        "tonalRamp": [
+          "#230000",
+          "#540000",
+          "#821300",
+          "#aa3d2a",
+          "#d3624d",
+          "#f0917d",
+          "#fcbcae",
+          "#ffe9e4"
+        ]
+      },
+      "nightmare": {
+        "role": "secondary",
+        "displayName": "Lilla dell'Incubo",
+        "canonical": "#c3a6ff",
+        "tonalRamp": [
+          "#100323",
+          "#2f1353",
+          "#4f307f",
+          "#7053a4",
+          "#9376cb",
+          "#b6a0e7",
+          "#d3c5f4",
+          "#f0ebfc"
+        ]
+      },
+      "gain": {
+        "role": "neutral",
+        "displayName": "Guadagno",
+        "canonical": "#b9df99",
+        "tonalRamp": [
+          "#040f00",
+          "#162e00",
+          "#304f08",
+          "#517230",
+          "#739653",
+          "#9bb982",
+          "#c2d5b2",
+          "#eaf1e5"
+        ]
+      },
+      "loss": {
+        "role": "neutral",
+        "displayName": "Perdita",
+        "canonical": "#ffb4a9",
+        "tonalRamp": [
+          "#1b0302",
+          "#45130f",
+          "#6d2f28",
+          "#935148",
+          "#b9746a",
+          "#d89d94",
+          "#ebc3bd",
+          "#f9ebe8"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "h1 di pagina in Marcellus."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Titoli di sezione grandi."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Titoli di carta, sezione e riga evento."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Testo operativo a 14px."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Ingredienti, note, assi."
+      },
+      "countdown": {
+        "displayName": "Countdown",
+        "purpose": "Conto alla rovescia degli eventi, numeri tabellari."
+      }
+    },
+    "shadows": [
+      {
+        "name": "gold-glow",
+        "value": "0 0 10px var(--gold)",
+        "purpose": "Bagliore della tratta migliore e del suo nodo."
+      },
+      {
+        "name": "now-glow",
+        "value": "0 0 6px white",
+        "purpose": "Indicatore dell'ora corrente sulla fascia degli eventi."
+      },
+      {
+        "name": "focus-ring",
+        "value": "outline: 2px solid var(--gold); outline-offset: 2px",
+        "purpose": "Focus visibile globale."
+      }
+    ],
+    "motion": [
+      {
+        "name": "transition-colors",
+        "value": "150ms, easing predefinito di Tailwind",
+        "purpose": "Hover di navigazione e bottoni."
+      },
+      {
+        "name": "pulse",
+        "value": "animate-pulse",
+        "purpose": "Indicatore di evento in corso e segnaposto della mappa."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "sm",
+        "value": "640px"
+      },
+      {
+        "name": "md",
+        "value": "768px"
+      },
+      {
+        "name": "lg",
+        "value": "1024px"
+      },
+      {
+        "name": "xl",
+        "value": "1280px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Azione principale: fondo oro, testo scuro, raggio 10px.",
+      "html": "<button class=\"ds-btn-primary\">Salva</button>",
+      "css": ".ds-btn-primary{height:32px;padding:0 10px;border:1px solid transparent;border-radius:10px;background:var(--gold,#fee685);color:#18181b;font:500 14px var(--font-text,'Noto Sans',sans-serif);cursor:pointer;transition:background .15s,transform .15s}.ds-btn-primary:hover{background:color-mix(in srgb,#fee685 80%,transparent)}.ds-btn-primary:active{transform:translateY(1px)}.ds-btn-primary:focus-visible{outline:2px solid #fee685;outline-offset:2px}"
+    },
+    {
+      "name": "Outline Button",
+      "kind": "button",
+      "refersTo": "button-outline",
+      "description": "Azione secondaria con bordo Filo Forte, ad esempio il download del calendario.",
+      "html": "<button class=\"ds-btn-outline\">Scarica calendario</button>",
+      "css": ".ds-btn-outline{height:36px;padding:0 12px;border:1px solid #3f3f46;border-radius:10px;background:#09090b;color:#f4f4f5;font:500 14px 'Noto Sans',sans-serif;cursor:pointer;transition:background .15s}.ds-btn-outline:hover{background:#1c1c20}.ds-btn-outline:focus-visible{outline:2px solid #fee685;outline-offset:2px}"
+    },
+    {
+      "name": "Search Field",
+      "kind": "input",
+      "refersTo": "input-field",
+      "description": "Campo di ricerca da 36px con etichetta in testo normale sopra.",
+      "html": "<label class=\"ds-input-label\" for=\"q\">Cerca materiale o carico</label><input id=\"q\" class=\"ds-input\" type=\"search\" placeholder=\"Es. Grain Liquor\">",
+      "css": ".ds-input-label{display:block;margin-bottom:6px;font:500 14px 'Noto Sans',sans-serif;color:#f4f4f5}.ds-input{height:36px;width:240px;padding:0 10px;border:1px solid #3f3f46;border-radius:10px;background:rgba(63,63,70,.3);color:#f4f4f5;font:400 14px 'Noto Sans',sans-serif;outline:none;transition:border-color .15s}.ds-input::placeholder{color:#8a8a94}.ds-input:focus-visible{border-color:#fee685;box-shadow:0 0 0 3px rgba(254,230,133,.5)}"
+    },
+    {
+      "name": "Navigation Rail",
+      "kind": "nav",
+      "refersTo": "nav-item",
+      "description": "Voci della barra laterale: glifo di gioco tinto dal colore del testo, oro quando attiva.",
+      "html": "<nav class=\"ds-nav\"><a class=\"ds-nav-item\" href=\"#\"><span class=\"ds-nav-glyph\"></span>Catalogo</a><a class=\"ds-nav-item\" href=\"#\" aria-current=\"page\"><span class=\"ds-nav-glyph\"></span>Eventi</a></nav>",
+      "css": ".ds-nav{display:flex;flex-direction:column;align-items:center;gap:4px;width:92px;padding:16px 0;background:#141416;border-right:1px solid #27272a}.ds-nav-item{display:flex;flex-direction:column;align-items:center;gap:6px;width:76px;padding:10px 0;border-radius:10px;color:#a1a1aa;font:400 11px 'Noto Sans',sans-serif;text-decoration:none;transition:background .15s,color .15s}.ds-nav-item:hover{background:#1c1c20;color:#f4f4f5}.ds-nav-item[aria-current=page]{background:#1c1c20;color:#fee685}.ds-nav-item:focus-visible{outline:2px solid #fee685;outline-offset:2px}.ds-nav-glyph{width:28px;height:28px;background:currentColor;border-radius:50%}"
+    },
+    {
+      "name": "Route Line",
+      "kind": "custom",
+      "refersTo": "card",
+      "description": "Componente firma: linea di trasporto con partenza, destinazioni e la tratta migliore accesa in oro.",
+      "html": "<ol class=\"ds-route\"><li class=\"ds-route-origin\">Jubilant Village</li><li class=\"ds-route-stop ds-best\"><span>Shadowpath Temple <b class=\"ds-badge\">Migliore</b></span><span class=\"ds-num\">47.385 oro</span></li><li class=\"ds-route-stop\"><span>Stargazer</span><span class=\"ds-num\">44.226 oro</span></li><li class=\"ds-route-stop\"><span>Seaglass Harbor</span><span class=\"ds-num\">41.067 oro</span></li></ol>",
+      "css": ".ds-route{position:relative;margin:0;padding:0 0 0 28px;list-style:none;display:grid;gap:12px;font:400 14px 'Noto Sans',sans-serif;color:#d4d4d8;width:320px}.ds-route::before{content:'';position:absolute;top:10px;bottom:10px;left:9px;width:3px;border-radius:9999px;background:#3f3f46}.ds-route li{position:relative}.ds-route-origin{color:#a1a1aa}.ds-route-origin::before{content:'';position:absolute;left:-28px;top:2px;width:21px;height:21px;box-sizing:border-box;border:3px solid #d4d4d8;border-radius:50%;background:#09090b}.ds-route-stop{display:flex;justify-content:space-between;gap:12px;align-items:center}.ds-route-stop::before{content:'';position:absolute;left:-23px;width:13px;height:13px;box-sizing:border-box;border:2px solid #3f3f46;border-radius:50%;background:#09090b}.ds-best{color:#fee685}.ds-best::before{border-color:#fee685;background:#fee685;box-shadow:0 0 10px #fee685}.ds-best::after{content:'';position:absolute;left:-19px;bottom:50%;height:calc(100% + 20px);width:3px;border-radius:9999px;background:#fee685;box-shadow:0 0 10px #fee685}.ds-best .ds-num{font-weight:600}.ds-num{font-variant-numeric:tabular-nums}.ds-badge{margin-left:8px;padding:1px 6px;border-radius:6px;background:#fee685;color:#000;font:700 10px 'Noto Sans',sans-serif;letter-spacing:.025em;text-transform:uppercase}"
+    },
+    {
+      "name": "Cargo Card",
+      "kind": "card",
+      "refersTo": "card",
+      "description": "Unità di Rotte: nome del carico, ingredienti e linea delle destinazioni su lastra con filo da 1px.",
+      "html": "<article class=\"ds-card\"><h2 class=\"ds-card-title\">Grain Spirits Crate</h2><p class=\"ds-card-meta\">3x Grain Liquor · 1x Blank Trade Certificate</p><details class=\"ds-card-more\"><summary>Totale per 7 pacchi</summary><p>21x Grain Liquor</p></details></article>",
+      "css": ".ds-card{width:320px;box-sizing:border-box;display:flex;flex-direction:column;gap:16px;padding:20px;border:1px solid #27272a;border-radius:14px;background:#141416;color:#f4f4f5;font:400 14px 'Noto Sans',sans-serif}.ds-card-title{margin:0;font:500 18px 'Noto Sans',sans-serif}.ds-card-meta{margin:0;color:#a1a1aa;font-size:12px}.ds-card-more{color:#a1a1aa;font-size:12px}.ds-card-more summary{cursor:pointer}.ds-card-more summary:hover{color:#f4f4f5}.ds-card-more summary:focus-visible{outline:2px solid #fee685;outline-offset:2px}"
+    },
+    {
+      "name": "Event Row",
+      "kind": "custom",
+      "refersTo": "icon-frame",
+      "description": "Riga evento: nome e stato, fascia sulla giornata con indicatore dell'ora, countdown tabellare.",
+      "html": "<div class=\"ds-event\"><div><div class=\"ds-event-name\">Crimson Rift · Hard</div><div class=\"ds-event-state\">In corso · termina tra</div></div><div class=\"ds-track\"><span class=\"ds-slot\" style=\"left:62%;width:4%\"></span><span class=\"ds-now\" style=\"left:64%\"></span></div><div class=\"ds-count\">00:06:41</div></div>",
+      "css": ".ds-event{display:grid;grid-template-columns:200px 1fr 120px;gap:20px;align-items:center;padding:16px 0;color:#f4f4f5;font:400 14px 'Noto Sans',sans-serif}.ds-event-name{font:400 18px Marcellus,Georgia,serif}.ds-event-state{font-weight:600;color:#ff8a73}.ds-track{position:relative;height:12px;border-radius:6px;background:repeating-linear-gradient(to right,#1c1c20 0 calc(12.5% - 1px),#3f3f46 calc(12.5% - 1px) 12.5%)}.ds-slot{position:absolute;top:0;bottom:0;border-radius:6px;background:#ff8a73}.ds-now{position:absolute;top:-4px;bottom:-4px;width:2px;background:#fff;box-shadow:0 0 6px #fff}.ds-count{text-align:right;font:600 30px 'Noto Sans',sans-serif;letter-spacing:-.025em;font-variant-numeric:tabular-nums;color:#ff8a73}"
+    }
+  ],
+  "narrative": {
+    "northStar": "La Linea di Auroria",
+    "overview": "L'app è una mappa di trasporto notturna disegnata con i colori di ArcheAge Chronicles: fondo di zinco quasi nero, testo freddo e una sola linea calda che si accende dove conta. Ogni relazione dei dati è resa come linea con fermate: dalla partenza alle destinazioni di un pacco, dalle aperture degli eventi alla giornata. Il valore migliore è la tratta accesa in oro, il resto resta spento sulla linea grigia.\n\nChi la usa è un membro della gilda accanto al gioco, in alt-tab, e cerca una risposta in pochi secondi. Per questo la superficie è densa ma ferma: righe pulite, numeri tabellari, bordi sottili al posto delle ombre, nessun movimento che non porti informazione. I titoli in Marcellus danno il tono del lettering del gioco; tutto il resto è Noto Sans leggibile a 14px.\n\nL'arte di gioco (icone, glifi della barra, emblema della gilda) entra nel sistema così com'è, in cornici scure o come maschera tinta dal colore del testo, mai ridisegnata. Dove il gioco non offre un glifo, le icone d'interfaccia sono lucide.",
+    "keyCharacteristics": [
+      "Notte di zinco in tema unico scuro (`color-scheme: dark`), nessun tema chiaro.",
+      "Una sola linea d'oro accesa per schermata: la rotta migliore, la sezione attiva, il link.",
+      "Profondità per strati tonali e bordi da 1px, non per ombre.",
+      "Le relazioni sono linee con nodi (rotte, prossime aperture, fascia oraria), non schede uguali.",
+      "Numeri sempre tabellari (`tabular-nums`) e in formato `it-IT`.",
+      "Colore come informazione: corallo per Crimson Rift, lilla per Brutal Nightmare, oro per il valore."
+    ],
+    "rules": [
+      {
+        "name": "The One Lit Line Rule",
+        "body": "In ogni gruppo l'oro accende una sola cosa: il valore migliore, la voce attiva o il link. Due elementi dorati allo stesso livello si annullano.",
+        "section": "colors"
+      },
+      {
+        "name": "The Event Family Rule",
+        "body": "Corallo e lilla appartengono agli eventi e a nient'altro: non decorano, dicono a quale famiglia appartiene una fascia, un nodo o un countdown.",
+        "section": "colors"
+      },
+      {
+        "name": "The Zinc Steps Rule",
+        "body": "I grigi sono una scala a gradini fissi (bg, surface, raised, line, line-strong). Non si inventano grigi intermedi.",
+        "section": "colors"
+      },
+      {
+        "name": "The Tabular Numbers Rule",
+        "body": "Prezzi, countdown, conteggi e assi orari usano `tabular-nums`; gli importi si mostrano `it-IT` con il separatore delle migliaia (`47.385 oro`).",
+        "section": "typography"
+      },
+      {
+        "name": "The Lettering Is for Titles Rule",
+        "body": "Marcellus vale per titoli e nomi di sezione; mai per corpo, tabelle o numeri.",
+        "section": "typography"
+      },
+      {
+        "name": "The Rail Never Moves Rule",
+        "body": "La navigazione laterale (o in basso) ha sempre le stesse cinque voci nello stesso ordine, con parità tra le sezioni; nessuna è promossa o nascosta.",
+        "section": "layout"
+      },
+      {
+        "name": "The Glow Means Data Rule",
+        "body": "Il bagliore è riservato alla tratta migliore e al \"ora\" degli eventi. Un bagliore su un elemento che non porta informazione è decorazione.",
+        "section": "elevation"
+      },
+      {
+        "name": "The Hairline Rule",
+        "body": "Si separa con un filo da 1px (`{colors.line}`), non con ombre, sfondi alternati o righe doppie.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "**Do** accendere in `{colors.gold}` una sola cosa per gruppo: la tratta migliore, la voce attiva o il link.",
+      "**Do** rendere una relazione come linea con nodi (dorsale 3px, nodi circolari) prima di pensare a una scheda o a una tabella.",
+      "**Do** colorare con corallo (`{colors.rift}`) e lilla (`{colors.nightmare}`) solo le due famiglie di evento.",
+      "**Do** separare con fili da 1px (`{colors.line}`) e con i gradini `{bg}`, `{surface}`, `{raised}`.",
+      "**Do** usare `tabular-nums` e il formato `it-IT` per ogni numero e importo.",
+      "**Do** mostrare un dato non confermato come tale (\"da verificare al banco\"), in testo, accanto al valore o al posto suo.",
+      "**Do** usare i glifi e le icone del gioco prima di quelli lucide, in cornice scura o come maschera.",
+      "**Do** tenere ogni etichetta di campo in testo normale sopra il controllo."
+    ],
+    "donts": [
+      "**Don't** fare una griglia di schede uguali o una tabella grigia con un accento dove una linea mostra la relazione; il catalogo-categorie è l'eccezione dichiarata, perché lì lo schema noto serve a trovare in fretta.",
+      "**Don't** introdurre un tema chiaro: il tema scuro è unico per il vincolo del proprietario.",
+      "**Don't** dare un'ombra morbida alle carte o usare il bagliore come decorazione.",
+      "**Don't** usare Marcellus per corpo, numeri o tabelle.",
+      "**Don't** usare il colore dorato per più di un elemento allo stesso livello.",
+      "**Don't** ricolorare l'arte di gioco o l'emblema; si inseriscono come sono."
+    ]
+  }
+}
