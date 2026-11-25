@@ -47,3 +47,6 @@ export type MapTile = { key: string; src: string; left: number; top: number; siz
 export type MapMarker = { key: string; left: number; top: number; label: string; title: string; kind: "point" | "pin" | "dot" }
 /** Fonte di un oggetto sulla mappa: etichetta e punti. */
 export type MapSource = { label: string; points: Point[] }
+
+export type EventType = { key: string; title: string; hours: number[]; duration: number; family: "rift" | "nightmare" }
+export type EventState = { key: string; title: string; family: EventType["family"]; active: boolean; status: string; countdown: string; local: string; note: string }
