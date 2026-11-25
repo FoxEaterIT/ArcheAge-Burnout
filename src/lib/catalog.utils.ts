@@ -35,3 +35,36 @@ export function searchCatalog(entries: [string, CatalogEntry][], query: CatalogQ
   const page = Math.min(Math.max(0, query.page), pages - 1)
   return { total: found.length, pages, page, items: found.slice(page * PAGE_SIZE, (page + 1) * PAGE_SIZE) }
 }
+
+/** Legge la query del catalogo dai parametri dell'URL (pagina 1-based nell'URL, 0-based qui). */
+export function parseCatalogQuery(params: Record<string, string | string[] | undefined>): CatalogQuery {
+  const one = (key: string) => {
+    const v = params[key]
+    return (Array.isArray(v) ? v[0] : v) ?? ""
+  }
+  const sort = one("ordine")
+  return {
+    q: one("q"),
+    type: one("tipo"),
+    category: one("categoria"),
+    rarity: one("rarita"),
+    sort: sort === "za" || sort === "level" ? sort : "az",
+    page: Math.max(0, (Number.parseInt(one("pagina"), 10) || 1) - 1),
+    all: one("tutte") === "1",
+  }
+}
+
+/** La home del catalogo si vede quando non c'è né ricerca né filtro. */
+export const isCatalogHome = (q: CatalogQuery) => !q.all && !q.q.trim() && !q.type && !q.category && !q.rarity
+
+/** URL del catalogo con i parametri dati; i valori vuoti spariscono. */
+export function catalogHref(params: Partial<Record<"q" | "tipo" | "categoria" | "rarita" | "ordine" | "pagina" | "tutte", string>>) {
+  const search = new URLSearchParams(Object.entries(params).filter(([, v]) => v) as [string, string][])
+  const s = search.toString()
+  return "/catalogo" + (s ? "?" + s : "")
+}
+
+/** Parametri dell'URL di una query, per costruire i link di paginazione e i filtri. */
+export function queryParams(q: CatalogQuery) {
+  return { q: q.q, tipo: q.type, categoria: q.category, rarita: q.rarity, ordine: q.sort === "az" ? "" : q.sort, pagina: q.page ? String(q.page + 1) : "", tutte: q.all ? "1" : "" }
+}

@@ -11,8 +11,9 @@ import materialPointsJson from "@/data/generated/material-points.json"
 import recipeBookJson from "@/data/generated/recipe-book.json"
 import routesJson from "@/data/generated/trade-routes.json"
 import worldCatalogJson from "@/data/generated/world-catalog.json"
+import { DB_GROUPS, dbType, searchCatalog } from "./catalog.utils"
 import { itemSlug } from "./text.utils"
-import type { Bench, CatalogEntry, GameItem, ItemLocations, ItemUse, Point, Recipe, Salvage, TradeRoute } from "./game.types"
+import type { Bench, CatalogEntry, CatalogQuery, CatalogResults, CatalogRow, CatalogTypeLink, GameItem, ItemLocations, ItemUse, Point, Recipe, Salvage, TradeRoute } from "./game.types"
 
 export const tradeRoutes: TradeRoute[] = (routesJson as string[][]).map(([origin, cargo, destination, payout, recipe]) => ({ origin, cargo, destination, payout, recipe }))
 export const benches = benchesJson as Bench[]
@@ -62,3 +63,37 @@ export function hasRecord(id: string) {
 export const cargoRecordIds: Record<string, string> = Object.fromEntries(
   catalogEntries.filter(([, e]) => e[1] === "Carichi commerciali").map(([id, e]) => [e[0], id]),
 )
+
+/** Arte rappresentativa di ogni categoria: la prima voce con arte, al posto dei glifi Unicode dell'originale. */
+export const categoryArt: Record<string, string> = {}
+for (const [, e] of catalogEntries) if (e[5] && !categoryArt[e[1]]) categoryArt[e[1]] = e[5]
+
+export const artFor = (entry: CatalogEntry | undefined) => (entry ? entry[5] ?? categoryArt[entry[1]] ?? null : null)
+export const artOf = (id: string) => artFor(worldCatalog[id])
+
+const typed = catalogEntries.map(([id, e]) => ({ id, e, type: dbType(e) }))
+
+export function catalogRow(id: string, e: CatalogEntry, type = dbType(e)): CatalogRow {
+  return { id, name: e[0], category: e[1], type, rarity: rarityOf(id) ?? "", level: gameItems[id]?.[3] ?? "", art: artFor(e) }
+}
+
+/** Gruppi della home: per ogni tipo il numero di voci e l'arte della prima voce che ne ha una. */
+export const catalogGroups: [string, CatalogTypeLink[]][] = DB_GROUPS.map(([title, types]) => [
+  title,
+  types.flatMap((type) => {
+    const found = typed.filter((t) => t.type === type)
+    if (!found.length) return []
+    return [{ type, count: found.length, art: (found.find((t) => t.e[5]) ?? found[0]).e[5] ?? categoryArt[found[0].e[1]] ?? null }]
+  }),
+])
+
+/** Equipaggiamento leggendario in vetrina, come nell'originale (i primi 9 con arte). */
+export const featuredGear: CatalogRow[] = typed
+  .filter((t) => t.e[1] === "Oggetti" && /Equipment.*Legendary/.test(t.e[2]) && t.e[5])
+  .slice(0, 9)
+  .map((t) => catalogRow(t.id, t.e, t.type))
+
+export function runCatalogSearch(query: CatalogQuery): CatalogResults {
+  const r = searchCatalog(catalogEntries, query, rarityOf, levelOf)
+  return { total: r.total, pages: r.pages, page: r.page, rows: r.items.map(([id, e]) => catalogRow(id, e)) }
+}

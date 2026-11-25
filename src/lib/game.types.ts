@@ -20,7 +20,7 @@ export type TemperTable = { weapon: boolean; pct: Record<string, number>; exact:
 export type Trait = [string, string, string, string, number]
 
 export type CatalogSort = "az" | "za" | "level"
-export type CatalogQuery = { q: string; type: string; category: string; rarity: string; sort: CatalogSort; page: number }
+export type CatalogQuery = { q: string; type: string; category: string; rarity: string; sort: CatalogSort; page: number; all: boolean }
 
 /** Pezzo di testo: libero, oppure un nome di gioco con icona e scheda. */
 export type Segment = string | { name: string; icon: string; href: string | null }
@@ -30,3 +30,8 @@ export type TradeFilters = { target: string; query: string; origin: string; dest
 export type CargoGroup = { origin: string; cargo: string; recipe: string; routes: TradeRoute[] }
 /** Fermata della linea: destinazione, ricompensa, oro se è oro, `best` se è il ricavo più alto in oro. */
 export type RouteStop = { destination: string; payout: string; gold: number | null; best: boolean }
+
+/** Riga del catalogo pronta per la tabella. */
+export type CatalogRow = { id: string; name: string; category: string; type: string; rarity: string; level: string; art: string | null }
+export type CatalogTypeLink = { type: string; count: number; art: string | null }
+export type CatalogResults = { total: number; pages: number; page: number; rows: CatalogRow[] }
