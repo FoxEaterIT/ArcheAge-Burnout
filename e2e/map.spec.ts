@@ -43,6 +43,28 @@ test("mappa: l'interruttore di un gruppo accende solo i livelli trovati", async 
   await expect(page).toHaveURL(/livelli=raccolta-mature-tree-pine(&|$)/)
 })
 
+test("mappa: i livelli sono tessere; l'elenco, se scelto, resta", async ({ page, isMobile }) => {
+  await page.goto("/mappa?livelli=boss")
+  await openPanel(page, isMobile)
+  await expect(page.getByRole("button", { name: "Tessere" })).toHaveAttribute("aria-pressed", "true")
+  // La tessera dice nome e conteggio, e si comporta come una casella.
+  const tile = page.getByRole("checkbox", { name: /^Boss \d/ })
+  await expect(tile).toBeChecked()
+  // Creature accese solo in parte: la casella del gruppo è mista e mostra il trattino.
+  const group = page.getByRole("checkbox", { name: "Tutti i livelli di Creature" })
+  await expect(group).toHaveAttribute("aria-checked", "mixed")
+  await expect(group.locator("svg.lucide-minus")).toBeVisible()
+  await tile.click()
+  await expect(page).toHaveURL(/livelli=(&|$)/)
+  await page.getByRole("button", { name: "Elenco" }).click()
+  await page.reload()
+  await openPanel(page, isMobile)
+  await expect(page.getByRole("button", { name: "Elenco" })).toHaveAttribute("aria-pressed", "true")
+  await page.getByText("Creature", { exact: true }).click()
+  await expect(page.getByRole("checkbox", { name: "Boss", exact: true })).not.toBeChecked()
+  await expectNoHorizontalScroll(page)
+})
+
 test("mappa: un punto con più voci le mostra tutte", async ({ page }) => {
   await page.goto("/mappa?livelli=interazioni&punto=interazioni:-4453,1797")
   const card = page.getByRole("region", { name: /^Punto scelto: Roseberry Bush/ })

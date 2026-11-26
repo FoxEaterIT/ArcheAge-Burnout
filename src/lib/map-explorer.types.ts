@@ -24,14 +24,19 @@ export type PointEntry = { name: string; href: string | null; detail: string }
 /** Punto scelto, pronto per la sua scheda breve: tutte le voci che stanno in quella posizione. `focus`: scelto da tastiera. */
 export type SelectedPoint = { ref: MapPointRef; index: number; entries: PointEntry[]; layerLabel: string; group: MapLayerGroupId | null; done: boolean; focus: boolean }
 
+/** Come si mostrano i livelli nel pannello: tessere con icona e conteggio, o elenco con caselle. */
+export type MapPanelView = "tessere" | "elenco"
+
 export type MapPanelLayer = { info: MapLayerInfo; on: boolean; loading: boolean; failed: boolean; count: string; done: number }
-export type MapPanelGroup = { group: MapLayerGroup; ids: string[]; expanded: boolean; swatch: string; checked: boolean | "indeterminate"; total: string; layers: MapPanelLayer[] }
+export type MapPanelGroup = { group: MapLayerGroup; ids: string[]; expanded: boolean; swatch: string; accent: string; checked: boolean | "indeterminate"; total: string; layers: MapPanelLayer[] }
 
 /** Pannello dei livelli: valori pronti e azioni stabili (non cambiano mentre si trascina la mappa). */
 export type MapPanelModel = {
   groups: MapPanelGroup[]
   filter: string
   setFilter: (value: string) => void
+  view: MapPanelView
+  setView: (view: MapPanelView) => void
   open: boolean
   toggleOpen: () => void
   toggleId: string

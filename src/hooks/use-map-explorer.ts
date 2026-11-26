@@ -6,13 +6,14 @@ import { fromScreen, indexLayer, pointsInView } from "@/lib/map-cluster.utils"
 import { SEARCH_LAYER } from "@/lib/map-canvas.utils"
 import type { LayerBundle, MapPanelGroup, MapPanelModel, MapPointRef, MapRouteModel, MapSearchOverlay, RouteStop, SelectedPoint } from "@/lib/map-explorer.types"
 import {
-  GROUP_COLOR_VARS, GROUP_SWATCH, MAX_ROUTE_STOPS, ZOOM_UNIT, doneCount, doneIndices, nearestFirst, optimizeRoute, parseMapUrl, refId, serializeMapUrl, startView,
+  GROUP_ACCENT, GROUP_COLOR_VARS, GROUP_SWATCH, MAX_ROUTE_STOPS, ZOOM_UNIT, doneCount, doneIndices, nearestFirst, optimizeRoute, parseMapUrl, refId, serializeMapUrl, startView,
 } from "@/lib/map-explorer.utils"
 import type { MapLayerGroup, MapLayerGroupId, MapLayerPoint } from "@/lib/map-layers.types"
 import { fromFraction, initialView, maximumWidth, minimumWidth } from "@/lib/map.utils"
 import { fmt } from "@/lib/text.utils"
 import { useMapCanvas } from "./use-map-canvas"
 import { useMapLayerData } from "./use-map-layer-data"
+import { useMapPanelView } from "./use-map-panel-view"
 import { useMapProgress } from "./use-map-progress"
 import { useMapRoute } from "./use-map-route"
 import { useReplaceQuery } from "./use-replace-query"
@@ -56,6 +57,7 @@ export function useMapExplorer(groups: MapLayerGroup[], search: MapSearchOverlay
   })
   const [selectedRef, setSelectedRef] = useState<(MapPointRef & { focus?: boolean }) | null>(initial.point)
   const [filter, setFilter] = useState("")
+  const [panelView, setPanelView] = useMapPanelView()
   const [panelOpen, setPanelOpen] = useState(false)
   // Gruppi aperti nel pannello: all'inizio solo quelli con un livello acceso, così il pannello resta corto.
   const [expanded, setExpanded] = useState<Set<string>>(() => new Set(groups.filter((g) => g.layers.some((l) => active.includes(l.id))).map((g) => g.id)))
@@ -207,6 +209,7 @@ export function useMapExplorer(groups: MapLayerGroup[], search: MapSearchOverlay
             ids: layers.map((l) => l.id),
             expanded: Boolean(term) || expanded.has(g.id),
             swatch: GROUP_SWATCH[g.id],
+            accent: GROUP_ACCENT[g.id],
             checked: on === 0 ? false : on === layers.length ? true : ("indeterminate" as const),
             total: fmt(g.layers.reduce((n, l) => n + l.count, 0)),
             layers: layers.map((l) => {
@@ -232,6 +235,8 @@ export function useMapExplorer(groups: MapLayerGroup[], search: MapSearchOverlay
       groups: panelGroups,
       filter,
       setFilter,
+      view: panelView,
+      setView: setPanelView,
       open: panelOpen,
       toggleOpen,
       toggleId: PANEL_TOGGLE_ID,
@@ -255,7 +260,7 @@ export function useMapExplorer(groups: MapLayerGroup[], search: MapSearchOverlay
       hideDone,
       setHideDone,
     }
-  }, [panelGroups, filter, panelOpen, active.length, layerInfo, clearLayer, hideDone, setHideDone])
+  }, [panelGroups, filter, panelView, setPanelView, panelOpen, active.length, layerInfo, clearLayer, hideDone, setHideDone])
 
   const { stops, editing, length, toggleEditing, remove, optimize, reverse, clear, replace } = route
   const fromView = useCallback(() => {

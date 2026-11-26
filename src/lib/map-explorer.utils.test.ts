@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest"
-import { ZOOM_UNIT, doneCount, nearestFirst, sameRoute, startView, doneIndices, optimizeRoute, parseDone, parseMapUrl, parseRoute, pointId, routeLength, serializeMapUrl } from "./map-explorer.utils"
+import { GROUP_ACCENT, GROUP_SWATCH, ZOOM_UNIT, doneCount, parsePanelView, nearestFirst, sameRoute, startView, doneIndices, optimizeRoute, parseDone, parseMapUrl, parseRoute, pointId, routeLength, serializeMapUrl } from "./map-explorer.utils"
 
 describe("indirizzo della mappa", () => {
   it("andata e ritorno di livelli, centro, zoom, punto e percorso", () => {
@@ -83,5 +83,20 @@ describe("percorsi", () => {
     const best = optimizeRoute(stops)
     expect(new Set(best)).toEqual(new Set(stops))
     expect(routeLength(best.map((s) => [s.x, s.y]))).toBeLessThan(routeLength(stops.map((s) => [s.x, s.y])))
+  })
+})
+
+describe("vista del pannello dei livelli", () => {
+  it("parte dalle tessere e ricorda l'elenco solo se salvato così", () => {
+    expect(parsePanelView("elenco")).toBe("elenco")
+    expect(parsePanelView("tessere")).toBe("tessere")
+    expect(parsePanelView(null)).toBe("tessere")
+    expect(parsePanelView({ vista: "elenco" })).toBe("tessere")
+  })
+
+  it("ogni gruppo ha il suo colore per le tessere, lo stesso del campione", () => {
+    for (const [group, swatch] of Object.entries(GROUP_SWATCH)) {
+      expect(GROUP_ACCENT[group as keyof typeof GROUP_ACCENT]).toBe(`[--group:var(--map-${swatch.replace("bg-map-", "")})]`)
+    }
   })
 })

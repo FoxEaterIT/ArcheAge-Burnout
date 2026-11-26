@@ -53,6 +53,13 @@ Con tutti i livelli accesi, trascinare costa circa 16–18 ms per fotogramma, mi
   - Il nome nella scheda è un link oro.
   - La riga della ricerca sta nella barra.
 
+## Pannello a tessere
+
+Su richiesta, il pannello dei livelli segue quello di interactivemap.app: tessere con icona, nome e conteggio, scelta fra tessere ed elenco (`burnout-map-vista-livelli-v1`), "Tutti" per gruppo con la casella del gruppo.
+- Le tessere sono caselle (`role="checkbox"`): i test e2e esistenti valgono per entrambe le viste. Nel DOM il nome viene prima del conteggio, così la casella si chiama "Boss 113"; a schermo `flex-col-reverse` mette icona e conteggio in alto.
+- La casella di un gruppo acceso in parte ora mostra un trattino (prima la spunta piena): modifica `Burnout:` in `src/components/ui/checkbox.tsx`.
+- Prove: unit 72, e2e 41 passati e 3 saltati di proposito, build.
+
 ## Differenze volute
 
 - I dati di interactivemap.app non si usano: sono protetti da un token e da coordinate falsate apposta, e i loro termini lo vietano.
@@ -62,4 +69,7 @@ Con tutti i livelli accesi, trascinare costa circa 16–18 ms per fotogramma, mi
 ## Aperto
 
 - Per il resto del continente servono altre fonti pulite: un export concesso, dati con licenza o segnalazioni della gilda.
+- Nodi di raccolta senza posizioni: Herbs, Cotton, Bluebell, Spireflower, Sundaisy, Yarrow, Clams, Crabs e Sea Mushroom. Il catalogo ne ha nome e totale, non le coordinate.
+- RaidDex (raiddex.com, verificato il 2026-11-26): la sua pagina della raccolta ha i totali per nodo ("Yarrow … 4226 spots"); non c'è un'API né una licenza aperta. I termini vietano la lettura automatica senza consenso scritto (§5.6) e riservano i diritti sulla banca dati a ogni uso oltre quello privato (§9.1). Il contatto è nell'imprint.
+- Da decidere: `item-locations.json` e la cartografia arrivano da RaidDex tramite l'Atlante ("Dati e cartografia: RaidDex") e il repository su GitHub è pubblico. Per stare dentro i loro termini serve il loro consenso, oppure un repository privato.
 - Un link con `zoom=16` su un telefono con densità 2 si apre a zoom 8 (limite della risoluzione delle tile).

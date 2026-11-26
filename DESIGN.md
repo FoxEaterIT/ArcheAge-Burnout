@@ -166,7 +166,7 @@ Zinco quasi nero con oro ambra come unico accento caldo; corallo e lilla identif
 Otto toni medi e chiari, uno per gruppo di livelli della mappa, lontani dal corallo e dal lilla degli eventi (`--map-alberi`, `--map-minerali`, `--map-piante`, `--map-creature`, `--map-png`, `--map-produzione`, `--map-commercio`, `--map-oggetti`). Si leggono sia sulla terra beige sia sul mare scuro delle tile; i segnaposti hanno sempre un bordo `{colors.bg}`.
 
 ### Named Rules
-**The Map Category Rule.** I colori `map-*` vivono solo sulla mappa interattiva e nei campioni del suo pannello: dicono a quale gruppo appartiene un segnaposto, non decorano altro.
+**The Map Category Rule.** I colori `map-*` vivono solo sulla mappa interattiva e nel suo pannello (campioni dei gruppi e tessere accese): dicono a quale gruppo appartiene un segnaposto o un livello, non decorano altro.
 
 **The One Lit Line Rule.** In ogni gruppo l'oro accende una sola cosa: il valore migliore, la voce attiva o il link. Due elementi dorati allo stesso livello si annullano.
 
@@ -244,7 +244,10 @@ Riga a tre zone separate da un filo: nome evento in Marcellus e stato nel colore
 
 ### Interactive Map
 Pannello dei livelli a sinistra (300px da `lg`, appiccicato) e mappa a destra, con i pulsanti dello zoom sopra la mappa in alto a destra. Sotto `lg` il pannello è un foglio alto al massimo il 45% dello schermo, che sale dal basso sopra la barra delle sezioni: aprendolo la mappa sale in cima, il percorso viene prima dei livelli, Esc lo chiude e i controlli sono alti 40px.
-- **Livelli:** gruppi richiudibili (aperti solo quelli con un livello acceso) con casella, campione del colore, conteggio e freccia; livelli con arte di gioco da 22px, nome e conteggio `tabular-nums` (`12/111` quando ci sono raccolti).
+- **Livelli:** gruppi richiudibili (aperti solo quelli con un livello acceso) con casella, campione del colore, conteggio e freccia; la casella di un gruppo acceso in parte mostra un trattino. Accanto alla ricerca, la scelta fra due viste, ricordata nel browser:
+  - **Tessere** (predefinita): griglia da 136px minimi, due colonne nel pannello. Ogni tessera ha in alto l'arte di gioco da 28px e il conteggio `tabular-nums`, sotto il nome su al massimo due righe a tutta larghezza (i nomi degli alberi si distinguono solo alla fine). Spenta: bordo `{colors.line}`, arte attenuata e in grigio, testo `{colors.ink-2}`. Accesa: bordo e fondo tinti dal colore del gruppo (55% e 10%) e una spunta nel colore del gruppo sull'angolo dell'arte, così lo stato non dipende solo dal colore. Con dei raccolti, in alto a destra il pulsante a icona "Azzera i raccolti".
+  - **Elenco:** righe con casella, arte da 22px, nome e conteggio.
+  - In entrambe il conteggio diventa `12/111` quando ci sono raccolti.
 - **Segnaposti:** disegnati su canvas.
   - Da lontano un cerchio con il conteggio scuro, nel colore del livello più presente.
   - Da vicino un gruppo per livello.

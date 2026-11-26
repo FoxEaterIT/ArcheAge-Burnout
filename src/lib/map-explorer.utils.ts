@@ -1,7 +1,7 @@
 // Mappa interattiva: indirizzo condivisibile, punti raccolti e percorsi.
 import type { Point } from "./game.types"
 import type { MapLayerData, MapLayerGroupId } from "./map-layers.types"
-import type { MapPointRef, MapUrlState, RouteStop } from "./map-explorer.types"
+import type { MapPanelView, MapPointRef, MapUrlState, RouteStop } from "./map-explorer.types"
 import { MAP_BOUNDS, toFraction } from "./map.utils"
 
 /** Larghezza della mappa intera a livello 2: lo zoom nell'indirizzo è un multiplo di questa. */
@@ -10,6 +10,12 @@ export const MAX_ROUTE_STOPS = 200
 export const PROGRESS_KEY = "burnout-map-raccolti-v1"
 export const ROUTE_KEY = "burnout-map-percorso-v1"
 export const HIDE_DONE_KEY = "burnout-map-nascondi-raccolti-v1"
+export const PANEL_VIEW_KEY = "burnout-map-vista-livelli-v1"
+
+/** Vista del pannello salvata: l'elenco solo se scelto, altrimenti le tessere. */
+export function parsePanelView(value: unknown): MapPanelView {
+  return value === "elenco" ? "elenco" : "tessere"
+}
 
 const LAYER_ID = /^[a-z0-9-]+$/
 const inside = ([x, y]: Point) => x >= MAP_BOUNDS[0] && x <= MAP_BOUNDS[2] && y >= MAP_BOUNDS[1] && y <= MAP_BOUNDS[3]
@@ -165,6 +171,18 @@ export const GROUP_COLOR_VARS: Record<MapLayerGroupId, string> = {
   produzione: "--map-produzione",
   commercio: "--map-commercio",
   oggetti: "--map-oggetti",
+}
+
+/** Colore del gruppo in `--group`, per bordo e fondo delle tessere accese. Classi scritte per intero perché Tailwind le trovi. */
+export const GROUP_ACCENT: Record<MapLayerGroupId, string> = {
+  alberi: "[--group:var(--map-alberi)]",
+  minerali: "[--group:var(--map-minerali)]",
+  piante: "[--group:var(--map-piante)]",
+  creature: "[--group:var(--map-creature)]",
+  png: "[--group:var(--map-png)]",
+  produzione: "[--group:var(--map-produzione)]",
+  commercio: "[--group:var(--map-commercio)]",
+  oggetti: "[--group:var(--map-oggetti)]",
 }
 
 /** Classi Tailwind dei campioni, scritte per intero perché Tailwind le trovi. */
