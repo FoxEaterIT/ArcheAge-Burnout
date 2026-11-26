@@ -19,6 +19,15 @@ colors:
   nightmare: "#c3a6ff"
   gain: "#b9df99"
   loss: "#ffb4a9"
+  map-alberi: "#9ccc65"
+  map-minerali: "#b0bec5"
+  map-piante: "#f48fb1"
+  map-creature: "#d64560"
+  map-png: "#64b5f6"
+  map-produzione: "#ffa24c"
+  map-commercio: "#4dd0c4"
+  map-oggetti: "#7b86f0"
+  map-sea: "#0f1a1f"
 typography:
   display:
     fontFamily: "Marcellus, Georgia, serif"
@@ -153,7 +162,12 @@ Zinco quasi nero con oro ambra come unico accento caldo; corallo e lilla identif
 - **Grigio Spento** (`{colors.dim}`, #8a8a94): placeholder, conteggi, note a piè di pagina.
 - **Guadagno** (`{colors.gain}`, #b9df99) e **Perdita** (`{colors.loss}`, #ffb4a9): variazioni delle statistiche nel selettore dell'equipaggiamento; la perdita fa anche da colore di errore e di distruzione.
 
+### Map Categories
+Otto toni medi e chiari, uno per gruppo di livelli della mappa, lontani dal corallo e dal lilla degli eventi (`--map-alberi`, `--map-minerali`, `--map-piante`, `--map-creature`, `--map-png`, `--map-produzione`, `--map-commercio`, `--map-oggetti`). Si leggono sia sulla terra beige sia sul mare scuro delle tile; i segnaposti hanno sempre un bordo `{colors.bg}`.
+
 ### Named Rules
+**The Map Category Rule.** I colori `map-*` vivono solo sulla mappa interattiva e nei campioni del suo pannello: dicono a quale gruppo appartiene un segnaposto, non decorano altro.
+
 **The One Lit Line Rule.** In ogni gruppo l'oro accende una sola cosa: il valore migliore, la voce attiva o il link. Due elementi dorati allo stesso livello si annullano.
 
 **The Event Family Rule.** Corallo e lilla appartengono agli eventi e a nient'altro: non decorano, dicono a quale famiglia appartiene una fascia, un nodo o un countdown.
@@ -227,6 +241,19 @@ Altezza 36px, raggio 10px, bordo `{colors.line-strong}`, fondo trasparente tinto
 
 ### Event Row (fascia sulla giornata)
 Riga a tre zone separate da un filo: nome evento in Marcellus e stato nel colore della famiglia, una fascia da 12px (sfondo a tacche ogni 3 ore, finestre in corallo o lilla, indicatore bianco con bagliore sull'ora corrente) e il countdown da 30px a destra. In corso: icona `CircleDot` che pulsa e countdown nel colore della famiglia. Sotto la fascia, ora locale e durata in `{colors.muted}`.
+
+### Interactive Map
+Pannello dei livelli a sinistra (300px da `lg`, appiccicato) e mappa a destra, con i pulsanti dello zoom sopra la mappa in alto a destra. Sotto `lg` il pannello è un foglio alto al massimo il 45% dello schermo, che sale dal basso sopra la barra delle sezioni: aprendolo la mappa sale in cima, il percorso viene prima dei livelli, Esc lo chiude e i controlli sono alti 40px.
+- **Livelli:** gruppi richiudibili (aperti solo quelli con un livello acceso) con casella, campione del colore, conteggio e freccia; livelli con arte di gioco da 22px, nome e conteggio `tabular-nums` (`12/111` quando ci sono raccolti).
+- **Segnaposti:** disegnati su canvas.
+  - Da lontano un cerchio con il conteggio scuro, nel colore del livello più presente.
+  - Da vicino un gruppo per livello.
+  - Da zoom 4 i punti singoli mostrano l'icona di gioco in una cornice `{colors.surface}` con l'anello del gruppo.
+  - Il punto scelto ha un anello `{colors.ink}`.
+  - I punti di una ricerca di un oggetto sono chiari (`{colors.ink}`), numerati quando sono al massimo 50.
+- **Scheda del punto:** carta da 14px in basso a sinistra sulla mappa (su mobile fissa sopra la barra delle sezioni): livello col campione, nome in Marcellus e oro (link alla scheda), dettaglio, le altre voci "Nello stesso punto", coordinate, e i pulsanti "Segna raccolto" (verde `{colors.gain}` quando attivo) e "Aggiungi al percorso".
+- **Percorso:** è la linea d'oro della mappa. Dorsale da 3px in `{colors.gold-strong}` con bordo scuro e nodi numerati, sulla mappa e nell'elenco delle tappe (nome e coordinate attenuate); la dorsale si ferma al primo e all'ultimo nodo.
+- **Elenco accessibile:** quando nella vista ci sono al massimo 40 segnaposti singoli, sotto la mappa compaiono come pulsanti.
 
 ### Game Icon
 Arte di gioco in cornice quadrata scura con gradiente e anello sottile, mai tagliata (`object-contain`); misure 16-72px secondo il contesto. Il glifo della navigazione usa invece la maschera tinta.

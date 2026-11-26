@@ -52,16 +52,16 @@ export function fromScreen(view: ScreenView, sx: number, sy: number): [number, n
   return [(sx + view.scrollLeft - offset) / view.width, (sy + view.scrollTop) / (view.width * MAP_RATIO)]
 }
 
-/** Celle dell'indice visibili nel riquadro, con un margine di una cella. */
-export function visibleCells(view: ScreenView) {
+/** Celle dell'indice visibili nel riquadro, con un margine di `margin` celle. */
+export function visibleCells(view: ScreenView, margin = 1) {
   const offset = Math.max(0, (view.clientWidth - view.width) / 2)
   const height = view.width * MAP_RATIO
   const clamp = (v: number, max: number) => Math.min(max, Math.max(0, v))
   return {
-    col0: clamp(Math.floor(((view.scrollLeft - offset) / view.width) * GRID_COLS) - 1, GRID_COLS - 1),
-    col1: clamp(Math.ceil(((view.scrollLeft - offset + view.clientWidth) / view.width) * GRID_COLS), GRID_COLS - 1),
-    row0: clamp(Math.floor((view.scrollTop / height) * GRID_ROWS) - 1, GRID_ROWS - 1),
-    row1: clamp(Math.ceil(((view.scrollTop + view.clientHeight) / height) * GRID_ROWS), GRID_ROWS - 1),
+    col0: clamp(Math.floor(((view.scrollLeft - offset) / view.width) * GRID_COLS) - margin, GRID_COLS - 1),
+    col1: clamp(Math.ceil(((view.scrollLeft - offset + view.clientWidth) / view.width) * GRID_COLS) + margin - 1, GRID_COLS - 1),
+    row0: clamp(Math.floor((view.scrollTop / height) * GRID_ROWS) - margin, GRID_ROWS - 1),
+    row1: clamp(Math.ceil(((view.scrollTop + view.clientHeight) / height) * GRID_ROWS) + margin - 1, GRID_ROWS - 1),
   }
 }
 
@@ -78,7 +78,8 @@ export function clusterView(layers: LayerIndex[], view: ScreenView, options: Clu
   const { spread = false, hidden, pinned } = options
   const cellPx = view.width / GRID_COLS
   const aggregate = !spread && cellPx < CLUSTER_PX * 0.75
-  const { col0, col1, row0, row1 } = visibleCells(view)
+  // Il margine copre almeno una cella di raggruppamento: i gruppi sul bordo non lampeggiano mentre si trascina.
+  const { col0, col1, row0, row1 } = visibleCells(view, Math.max(1, Math.ceil(CLUSTER_PX / cellPx)))
   const buckets = new Map<number, Bucket>()
   const items: DrawItem[] = []
   const put = (slot: number, sx: number, sy: number, count: number, layer: string, index: number) => {
@@ -107,7 +108,9 @@ export function clusterView(layers: LayerIndex[], view: ScreenView, options: Clu
         const from = layer.start[c]
         const to = layer.start[c + 1]
         if (from === to) continue
-        if (aggregate && !skip?.size) {
+        // Da lontano si somma la cella intera, tranne quando contiene punti nascosti o il punto scelto.
+        const pinnedHere = pinned?.layer === layer.id && pinned.index < layer.fx.length && layer.order.subarray(from, to).includes(pinned.index)
+        if (aggregate && !skip?.size && !pinnedHere) {
           const count = to - from
           const [sx, sy] = toScreen(view, layer.sumX[c] / count, layer.sumY[c] / count)
           put(slot, sx, sy, count, layer.id, count === 1 ? layer.order[from] : -1)

@@ -105,6 +105,17 @@ export function doneCount(layerId: string, done: Set<string>) {
   return n
 }
 
+/** Stesse tappe nello stesso ordine (i nomi non contano): il link e il percorso salvato coincidono. */
+export const sameRoute = (a: { x: number; y: number }[], b: { x: number; y: number }[]) => a.length === b.length && a.every((s, i) => s.x === b[i].x && s.y === b[i].y)
+
+/** Punto da cui parte un percorso dai segnaposti visibili: il più vicino a `center` (pixel dello schermo). */
+export function nearestFirst<T extends { sx: number; sy: number }>(points: T[], center: [number, number]): T[] {
+  if (points.length < 2) return points
+  let best = 0
+  for (let i = 1; i < points.length; i++) if (Math.hypot(points[i].sx - center[0], points[i].sy - center[1]) < Math.hypot(points[best].sx - center[0], points[best].sy - center[1])) best = i
+  return [points[best], ...points.slice(0, best), ...points.slice(best + 1)]
+}
+
 /** Lunghezza del percorso in unità di gioco. */
 export function routeLength(stops: Point[]) {
   let total = 0

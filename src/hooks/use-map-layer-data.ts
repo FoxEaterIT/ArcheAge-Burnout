@@ -1,5 +1,5 @@
 "use client"
-import { useEffect, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { indexLayer } from "@/lib/map-cluster.utils"
 import type { LayerBundle } from "@/lib/map-explorer.types"
 import type { MapLayerData } from "@/lib/map-layers.types"
@@ -46,9 +46,7 @@ export function useMapLayerData(ids: string[]) {
     }
   }, [key])
 
-  return {
-    bundles,
-    loading: ids.filter((id) => !bundles.has(id) && !failed.has(id)),
-    failed: ids.filter((id) => failed.has(id)),
-  }
+  const loading = useMemo(() => (key ? key.split(",") : []).filter((id) => !bundles.has(id) && !failed.has(id)), [key, bundles, failed])
+  const failedIds = useMemo(() => (key ? key.split(",") : []).filter((id) => failed.has(id)), [key, failed])
+  return { bundles, loading, failed: failedIds }
 }

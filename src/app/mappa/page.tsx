@@ -2,7 +2,7 @@ import type { Metadata } from "next"
 import Link from "next/link"
 import { Suspense } from "react"
 import { GameIcon } from "@/components/game/game-icon"
-import { MapExplorerLazy } from "@/components/map/map-explorer-lazy"
+import { MapExplorerLazy, MapExplorerSkeleton } from "@/components/map/map-explorer-lazy"
 import { MapSearch } from "@/components/map/map-search"
 import { PageHeader } from "@/components/shell/app-shell"
 import { SearchFieldFallback } from "@/components/ui/search-field-fallback"
@@ -20,7 +20,7 @@ export default function MappaPage({ searchParams }: PageProps<"/mappa">) {
         </Suspense>
       </PageHeader>
       <div className="px-4 py-6 sm:px-6 lg:px-10">
-        <Suspense fallback={<div className="h-[clamp(420px,calc(100dvh-15rem),920px)] animate-pulse rounded-lg border border-line bg-surface lg:ml-[324px]" />}>
+        <Suspense fallback={<MapExplorerSkeleton />}>
           <MapBody searchParams={searchParams} />
         </Suspense>
       </div>

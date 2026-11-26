@@ -23,6 +23,7 @@ describe("indice spaziale", () => {
     const cells = visibleCells({ width: 9600, scrollLeft: 4800, scrollTop: 0, clientWidth: 960, clientHeight: 1280 })
     expect(cells.col0).toBe(47)
     expect(cells.col1).toBe(58)
+    expect(visibleCells({ width: 9600, scrollLeft: 4800, scrollTop: 0, clientWidth: 960, clientHeight: 1280 }, 3)).toMatchObject({ col0: 45, col1: 60 })
     expect(cells.row0).toBe(0)
   })
 
@@ -65,6 +66,12 @@ describe("raggruppamento", () => {
   it("tiene fuori dai gruppi il punto scelto", () => {
     const close = { width: 4800, scrollLeft: 4800 * 0.5 - 480, scrollTop: 4800 * (4 / 3) * 0.5 - 400, clientWidth: 960, clientHeight: 800 }
     const items = clusterView([dense], close, { pinned: { layer: "alberi", index: 7 } })
+    expect(items).toContainEqual(expect.objectContaining({ kind: "point", layer: "alberi", index: 7 }))
+    expect(items.reduce((n, i) => n + (i.kind === "cluster" ? i.count : 1), 0)).toBe(500)
+  })
+
+  it("tiene fuori dai gruppi il punto scelto anche da lontano", () => {
+    const items = clusterView([dense], overview, { pinned: { layer: "alberi", index: 7 } })
     expect(items).toContainEqual(expect.objectContaining({ kind: "point", layer: "alberi", index: 7 }))
     expect(items.reduce((n, i) => n + (i.kind === "cluster" ? i.count : 1), 0)).toBe(500)
   })

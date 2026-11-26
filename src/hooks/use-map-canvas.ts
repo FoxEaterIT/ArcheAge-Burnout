@@ -67,6 +67,8 @@ export function useMapCanvas(frame: React.RefObject<HTMLDivElement | null>, widt
     const search = s.search ? clusterView([s.search], view, { spread: s.spread || numbered, pinned: s.selected }) : []
 
     drawRoute(ctx, s.route, view, palette)
+    // Prima i gruppi grandi, poi i piccoli e i punti: dove si sovrappongono, i numeri piccoli restano leggibili.
+    items.sort((a, b) => (b.kind === "cluster" ? b.count : 0) - (a.kind === "cluster" ? a.count : 0))
     for (const item of items) {
       const layer = colors.get(item.layer)
       if (!layer) continue
@@ -126,12 +128,7 @@ export function useMapCanvas(frame: React.RefObject<HTMLDivElement | null>, widt
   // Il ref resta fuori dall'oggetto: chi lo usa nel render deve leggere solo stato.
   return [canvasRef, {
     visible,
-    /** Segnaposto sotto un punto della finestra (coordinate del puntatore). */
-    hitAt: (clientX: number, clientY: number) => {
-      const f = frame.current
-      if (!f) return null
-      const rect = f.getBoundingClientRect()
-      return hitTest(itemsRef.current, clientX - rect.left, clientY - rect.top, widthRef.current >= ICON_WIDTH)
-    },
+    /** Segnaposto sotto un punto del riquadro (pixel, dentro il bordo). */
+    hitAt: ([x, y]: [number, number]) => hitTest(itemsRef.current, x, y, widthRef.current >= ICON_WIDTH),
   }] as const
 }

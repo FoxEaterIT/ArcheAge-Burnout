@@ -28,18 +28,22 @@ describe("livelli della mappa", () => {
   })
 
   it("mette PNG, mostri e boss del catalogo nei loro livelli", () => {
-    expect(byId.get("png")!.count).toBeGreaterThanOrEqual(2662)
-    expect(byId.get("boss")!.count).toBeGreaterThanOrEqual(112)
-    expect(byId.get("mostri")!.count).toBeGreaterThanOrEqual(1254)
+    expect(byId.get("png")!.count).toBeGreaterThan(2500)
+    expect(byId.get("boss")!.count).toBeGreaterThan(100)
+    expect(byId.get("mostri")!.count).toBeGreaterThan(1200)
     for (const id of ["venditori", "missioni", "banchi", "commercio", "interazioni", "oggetti", "zone"]) expect(byId.has(id), id).toBe(true)
   })
 
-  it("conta i punti come li serve e non ripete la stessa voce nello stesso punto", () => {
+  it("ha un solo segnaposto per posizione, con tutte le voci che stanno lì", () => {
     for (const layer of info) {
       const points = data.get(layer.id)!.points
       expect(points.length, layer.id).toBe(layer.count)
-      expect(new Set(points.map((p) => p.join("|"))).size, layer.id).toBe(points.length)
+      expect(new Set(points.map(([x, y]) => `${x},${y}`)).size, layer.id).toBe(points.length)
+      for (const p of points) expect(new Set(p.slice(2)).size, layer.id).toBe(p.length - 2)
     }
+    // Due Roseberry Bush (due schede) nello stesso punto: un segnaposto con due voci.
+    const bush = data.get("interazioni")!.points.find(([x, y]) => x === -4453 && y === 1797)!
+    expect(bush.slice(2).map((i) => data.get("interazioni")!.entries[i][1])).toEqual(expect.arrayContaining(["/scheda/roseberry", "/scheda/roseberry-70102001"]))
   })
 
   it("dà id unici e link solo verso le schede", () => {

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest"
-import { ZOOM_UNIT, doneCount, startView, doneIndices, optimizeRoute, parseDone, parseMapUrl, parseRoute, pointId, routeLength, serializeMapUrl } from "./map-explorer.utils"
+import { ZOOM_UNIT, doneCount, nearestFirst, sameRoute, startView, doneIndices, optimizeRoute, parseDone, parseMapUrl, parseRoute, pointId, routeLength, serializeMapUrl } from "./map-explorer.utils"
 
 describe("indirizzo della mappa", () => {
   it("andata e ritorno di livelli, centro, zoom, punto e percorso", () => {
@@ -55,6 +55,17 @@ describe("raccolti", () => {
 })
 
 describe("percorsi", () => {
+  it("riconosce lo stesso percorso anche senza i nomi", () => {
+    expect(sameRoute([{ x: 1, y: 2 }], [{ x: 1, y: 2, name: "Archeum" } as { x: number; y: number }])).toBe(true)
+    expect(sameRoute([{ x: 1, y: 2 }], [{ x: 2, y: 1 }])).toBe(false)
+  })
+
+  it("parte dal segnaposto più vicino al centro della vista", () => {
+    const points = [{ sx: 0, sy: 0 }, { sx: 95, sy: 105 }, { sx: 300, sy: 10 }]
+    expect(nearestFirst(points, [100, 100])[0]).toBe(points[1])
+    expect(nearestFirst(points, [100, 100])).toHaveLength(3)
+  })
+
   it("misura la lunghezza", () => {
     expect(routeLength([[0, 0], [3, 4], [3, 10]])).toBe(11)
   })

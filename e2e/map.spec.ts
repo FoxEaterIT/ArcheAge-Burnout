@@ -28,10 +28,35 @@ test("mappa: un link condiviso apre livelli e punto scelto", async ({ page, isMo
 
 test("mappa: i livelli accesi finiscono nell'indirizzo", async ({ page, isMobile }) => {
   await openPanel(page, isMobile)
+  // I gruppi senza livelli accesi partono chiusi: si aprono dal loro nome.
+  await page.getByText("Creature", { exact: true }).click()
   await page.getByRole("checkbox", { name: "Boss" }).click()
   await expect(page).toHaveURL(/livelli=boss(&|$)/)
   await page.getByRole("button", { name: "Nessuno" }).click()
   await expect(page).toHaveURL(/livelli=(&|$)/)
+})
+
+test("mappa: l'interruttore di un gruppo accende solo i livelli trovati", async ({ page, isMobile }) => {
+  await openPanel(page, isMobile)
+  await page.getByLabel("Cerca un livello").fill("pine")
+  await page.getByRole("checkbox", { name: "Tutti i livelli di Alberi" }).click()
+  await expect(page).toHaveURL(/livelli=raccolta-mature-tree-pine(&|$)/)
+})
+
+test("mappa: un punto con più voci le mostra tutte", async ({ page }) => {
+  await page.goto("/mappa?livelli=interazioni&punto=interazioni:-4453,1797")
+  const card = page.getByRole("region", { name: /^Punto scelto: Roseberry Bush/ })
+  await expect(card.getByText("Nello stesso punto")).toBeVisible()
+  await expect(card.getByRole("link", { name: "Roseberry Bush" })).toHaveCount(2)
+})
+
+test("mappa: spegnere il livello chiude il punto scelto", async ({ page, isMobile }) => {
+  await page.goto(`/mappa?livelli=raccolta-archeum&punto=${ARCHEUM}`)
+  await expect(page.getByRole("region", { name: "Punto scelto: Archeum" })).toBeVisible()
+  await openPanel(page, isMobile)
+  await page.getByRole("checkbox", { name: "Archeum" }).click()
+  await expect(page.getByRole("region", { name: "Punto scelto: Archeum" })).toHaveCount(0)
+  await expect(page).not.toHaveURL(/punto=/)
 })
 
 test("mappa: un punto segnato come raccolto resta salvato", async ({ page, isMobile }) => {
@@ -42,6 +67,30 @@ test("mappa: un punto segnato come raccolto resta salvato", async ({ page, isMob
   await expect(page.getByRole("button", { name: "Raccolto" })).toBeVisible()
   await openPanel(page, isMobile)
   await expect(page.getByText("1/111")).toBeVisible()
+  await page.getByRole("button", { name: "Azzera i raccolti di Archeum" }).click()
+  await expect(page.getByText("1/111")).toHaveCount(0)
+  await expect(page.getByRole("button", { name: "Segna raccolto" })).toBeVisible()
+})
+
+test("mappa: col percorso attivo un clic sulla mappa aggiunge una tappa", async ({ page, isMobile }) => {
+  await page.goto("/mappa?livelli=&x=0&y=0&zoom=3")
+  await openPanel(page, isMobile)
+  await page.getByRole("button", { name: "Aggiungi tappe col clic" }).click()
+  if (isMobile) await page.getByRole("button", { name: "Chiudi", exact: true }).click()
+  const map = page.getByRole("region", { name: /^Mappa di Auroria/ })
+  await map.click({ position: { x: 60, y: 60 } })
+  await map.click({ position: { x: 160, y: 140 } })
+  await expect(page).toHaveURL(/percorso=-?\d+,-?\d+;-?\d+,-?\d+/)
+})
+
+test("mappa: su mobile il pannello si apre e si chiude con Esc", async ({ page, isMobile }) => {
+  test.skip(!isMobile, "il pannello a foglio esiste solo sotto lg")
+  const toggle = page.getByRole("button", { name: /^Livelli \(/ })
+  await toggle.click()
+  await expect(page.getByRole("button", { name: "Chiudi", exact: true })).toBeFocused()
+  await page.keyboard.press("Escape")
+  await expect(page.getByRole("heading", { name: "Livelli" })).toBeHidden()
+  await expect(toggle).toBeFocused()
 })
 
 test("mappa: elenco dei segnaposti nella vista e percorso", async ({ page, isMobile }) => {
@@ -52,6 +101,7 @@ test("mappa: elenco dei segnaposti nella vista e percorso", async ({ page, isMob
   await expect(page.getByRole("region", { name: /^Punto scelto: Archeum/ })).toBeVisible()
   await openPanel(page, isMobile)
   await page.getByRole("button", { name: "Dai segnaposti visibili" }).click()
+  if (isMobile) await expect(page.getByRole("button", { name: "Chiudi", exact: true })).toBeVisible()
   const stops = page.getByRole("region", { name: "Percorso" }).getByRole("listitem").filter({ hasText: "Archeum" })
   await expect(stops.first()).toBeVisible()
   expect(await stops.count()).toBeGreaterThan(1)

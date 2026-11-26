@@ -1,5 +1,5 @@
 // Livelli della mappa interattiva, costruiti dalle fonti per oggetto dell'Atlante e dalle posizioni del catalogo.
-import type { MapLayerData, MapLayerEntry, MapLayerGroup, MapLayerGroupId, MapLayerInfo, MapLayerSources } from "./map-layers.types"
+import type { MapLayerData, MapLayerEntry, MapLayerGroup, MapLayerGroupId, MapLayerInfo, MapLayerPoint, MapLayerSources } from "./map-layers.types"
 import { itemSlug } from "./text.utils"
 import { recordHref } from "./trade.utils"
 
@@ -45,11 +45,11 @@ export function actorDetail(tags: string) {
   return [level, zone].filter(Boolean).join(" · ")
 }
 
-type Builder = { id: string; group: MapLayerGroupId; label: string; art: string | null; entries: MapLayerEntry[]; entryIndex: Map<string, number>; points: [number, number, number][]; seen: Set<string> }
+type Builder = { id: string; group: MapLayerGroupId; label: string; art: string | null; entries: MapLayerEntry[]; entryIndex: Map<string, number>; points: MapLayerPoint[]; at: Map<string, MapLayerPoint> }
 
 /**
  * Costruisce tutti i livelli. Le fonti derivate (smontaggio, pietre incastonate) ripetono posizioni
- * già presenti in altre fonti e si saltano; la stessa voce nello stesso punto compare una volta sola.
+ * già presenti in altre fonti e si saltano. Un punto per posizione: le voci nello stesso posto si sommano al punto.
  */
 export function buildMapLayers({ locations, catalog }: MapLayerSources) {
   const layers = new Map<string, Builder>()
@@ -73,7 +73,7 @@ export function buildMapLayers({ locations, catalog }: MapLayerSources) {
   const layer = (id: string, group: MapLayerGroupId, label: string, art: string | null) => {
     let b = layers.get(id)
     if (!b) {
-      b = { id, group, label, art, entries: [], entryIndex: new Map(), points: [], seen: new Set() }
+      b = { id, group, label, art, entries: [], entryIndex: new Map(), points: [], at: new Map() }
       layers.set(id, b)
     }
     return b
@@ -90,10 +90,13 @@ export function buildMapLayers({ locations, catalog }: MapLayerSources) {
       b.entries.push(entry)
       b.entryIndex.set(key, index)
     }
-    const at = `${index}|${x}|${y}`
-    if (b.seen.has(at)) return
-    b.seen.add(at)
-    b.points.push([x, y, index])
+    const position = `${x}|${y}`
+    const point = b.at.get(position)
+    if (!point) {
+      const created: MapLayerPoint = [x, y, index]
+      b.at.set(position, created)
+      b.points.push(created)
+    } else if (!point.slice(2).includes(index)) point.push(index)
   }
   const href = (id: string | null) => (id ? recordHref(id) : null)
 

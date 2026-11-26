@@ -22,43 +22,45 @@ export function MapExplorer({ groups, search }: Props) {
       <aside
         id="map-panel"
         aria-label="Livelli e percorso"
+        onKeyDown={x.panel.onKeyDown}
         className={cn(
-          "min-w-0 space-y-4 lg:sticky lg:top-4 lg:block lg:max-h-[calc(100dvh-2rem)] lg:self-start lg:overflow-auto lg:pr-2",
-          // Sotto lg il pannello sale dal basso sopra la mappa, appena sopra la barra delle sezioni.
-          "max-lg:fixed max-lg:inset-x-0 max-lg:bottom-0 max-lg:z-50 max-lg:max-h-[70dvh] max-lg:overflow-auto max-lg:rounded-t-xl max-lg:border-t max-lg:border-line-strong max-lg:bg-surface max-lg:p-4 max-md:bottom-[calc(4rem+env(safe-area-inset-bottom))]",
+          "flex min-w-0 flex-col gap-4 lg:sticky lg:top-4 lg:max-h-[calc(100dvh-2rem)] lg:self-start lg:overflow-auto lg:pr-2",
+          // Sotto lg il pannello sale dal basso e lascia scoperta la parte alta della mappa.
+          "max-lg:fixed max-lg:inset-x-0 max-lg:bottom-0 max-lg:z-50 max-lg:max-h-[45dvh] max-lg:overflow-auto max-lg:rounded-t-xl max-lg:border-t max-lg:border-line-strong max-lg:bg-surface max-lg:p-4 max-md:bottom-[calc(4rem+env(safe-area-inset-bottom))]",
           !x.panel.open && "max-lg:hidden",
         )}
       >
-        <div className="flex justify-end lg:hidden">
-          <Button variant="ghost" size="sm" className="text-muted" onClick={x.panel.toggleOpen}><X aria-hidden />Chiudi</Button>
+        {x.panel.open ? (
+          <div className="flex items-center justify-between gap-2 lg:hidden">
+            <p aria-hidden className="text-xs text-muted">{x.status}</p>
+            <Button variant="ghost" size="sm" className="h-10 text-muted" onClick={x.panel.toggleOpen} autoFocus><X aria-hidden />Chiudi</Button>
+          </div>
+        ) : null}
+        <div className="max-lg:order-1">
+          <MapLayersPanel panel={x.panel} />
         </div>
-        <MapLayersPanel panel={x.panel} />
         <MapRoutePanel route={x.route} />
       </aside>
       <div className="min-w-0 space-y-3">
-        {x.search ? (
-          <div className="flex flex-wrap items-end gap-3">
-            <p className="text-sm">
-              Punti di <Link href={x.search.href} className="font-medium text-gold hover:underline">{x.search.name}</Link>
-            </p>
-            {x.search.sources.length > 1 ? (
-              <GameSelect label="Fonte dell'oggetto" value={String(x.search.source)} onChange={(v) => x.search!.setSource(Number(v))} options={x.search.sources.map((s) => ({ value: String(s.index), label: `${s.label} (${s.count})` }))} className="w-auto min-w-64" />
-            ) : null}
-            {x.search.intro ? <p className="w-full text-sm text-ink-2">{x.search.intro}</p> : null}
-          </div>
-        ) : null}
         <div className="flex flex-wrap items-center gap-2 text-sm">
-          <Button variant="outline" size="sm" className="lg:hidden" aria-expanded={x.panel.open} aria-controls="map-panel" onClick={x.panel.toggleOpen}>
+          <Button id={x.panel.toggleId} variant="outline" size="sm" className="max-lg:h-10 lg:hidden" aria-expanded={x.panel.open} aria-controls="map-panel" onClick={x.panel.toggleOpen}>
             <Layers aria-hidden />Livelli ({x.panel.activeCount})
           </Button>
-          <Button variant="outline" size="icon-sm" aria-label="Riduci" onClick={x.map.zoomOut} disabled={!x.map.canZoomOut}><Minus /></Button>
-          <Button variant="outline" size="icon-sm" aria-label="Ingrandisci" onClick={x.map.zoomIn} disabled={!x.map.canZoomIn}><Plus /></Button>
-          <Button variant="outline" size="sm" onClick={x.map.reset}><LocateFixed aria-hidden />Panoramica</Button>
-          <Button variant="outline" size="sm" onClick={x.copyLink}><Link2 aria-hidden />Copia link</Button>
-          <p role="status" className="text-xs text-muted">
-            {x.status || (x.loadingCount ? `Carico ${x.loadingCount === 1 ? "un livello" : `${x.loadingCount} livelli`}…` : x.failedCount ? "Alcuni livelli non si sono caricati: spegnili e riaccendili per riprovare." : "")}
-          </p>
+          <Button variant="outline" size="sm" className="max-lg:h-10" onClick={x.map.reset}><LocateFixed aria-hidden />Panoramica</Button>
+          <Button variant="outline" size="sm" className="max-lg:h-10" onClick={x.copyLink}><Link2 aria-hidden />Copia link</Button>
+          {x.search ? (
+            <>
+              <p className="text-sm lg:ml-2">
+                Punti di <Link href={x.search.href} className="font-medium text-gold underline-offset-4 hover:underline">{x.search.name}</Link>
+              </p>
+              {x.search.options.length > 1 ? (
+                <GameSelect label="Fonte dell'oggetto" value={x.search.source} onChange={x.search.setSource} options={x.search.options} className="w-auto max-w-full min-w-56 max-lg:h-10" />
+              ) : null}
+            </>
+          ) : null}
+          <p role="status" className="text-xs text-muted">{x.status}</p>
         </div>
+        {x.search?.intro ? <p className="text-sm text-ink-2">{x.search.intro}</p> : null}
         <div className="relative">
           <div
             ref={frameRef}
@@ -69,7 +71,7 @@ export function MapExplorer({ groups, search }: Props) {
             onKeyDown={x.map.onKeyDown}
             onClick={x.onClick}
             {...x.pointer}
-            className="relative h-[clamp(420px,calc(100dvh-15rem),920px)] cursor-grab overflow-auto overscroll-contain rounded-lg border border-line-strong bg-[#0f1a1f] active:cursor-grabbing"
+            className="relative h-[clamp(420px,calc(100dvh-13rem),920px)] cursor-grab overflow-auto overscroll-contain rounded-lg border border-line-strong bg-map-sea active:cursor-grabbing"
           >
             <div className="relative mx-auto overflow-hidden" style={{ width: x.map.width || "100%", aspectRatio: "3 / 4" }}>
               {x.map.tiles.map((t) => (
@@ -78,6 +80,10 @@ export function MapExplorer({ groups, search }: Props) {
             </div>
           </div>
           <canvas ref={canvasRef} aria-hidden className="pointer-events-none absolute top-px left-px z-10 rounded-lg" />
+          <div className="absolute top-3 right-3 z-20 flex flex-col gap-1.5">
+            <Button variant="outline" size="icon" className="bg-surface max-lg:size-10" aria-label="Ingrandisci" onClick={x.map.zoomIn} disabled={!x.map.canZoomIn}><Plus /></Button>
+            <Button variant="outline" size="icon" className="bg-surface max-lg:size-10" aria-label="Riduci" onClick={x.map.zoomOut} disabled={!x.map.canZoomOut}><Minus /></Button>
+          </div>
           {x.selected ? <MapPointCard point={x.selected} onClose={x.close} onToggleDone={x.toggleDone} onAddToRoute={x.addSelectedToRoute} /> : null}
         </div>
         {x.visible ? (
@@ -87,7 +93,7 @@ export function MapExplorer({ groups, search }: Props) {
               <ul className="flex flex-wrap gap-2">
                 {x.visible.map((m) => (
                   <li key={m.key}>
-                    <Button variant="outline" size="sm" onClick={() => x.choose(m.layer, m.index)}>
+                    <Button variant="outline" size="sm" className="max-lg:h-10" onClick={() => x.choose(m.layer, m.index, true)}>
                       {m.name}<span className="text-dim tabular-nums">{m.detail}</span>
                     </Button>
                   </li>

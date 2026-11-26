@@ -30,11 +30,13 @@
   --map-alberi: #9ccc65;
   --map-minerali: #b0bec5;
   --map-piante: #f48fb1;
-  --map-creature: #ef6f6c;
+  --map-creature: #d64560;
   --map-png: #64b5f6;
   --map-produzione: #ffa24c;
   --map-commercio: #4dd0c4;
-  --map-oggetti: #c58bd9;
+  --map-oggetti: #7b86f0;
+  /* mare dietro le tile, dove la mappa non arriva */
+  --map-sea: #0f1a1f;
 
   /* variabili di shadcn mappate sulla palette */
   --background: var(--bg);
@@ -100,6 +102,7 @@
   --color-map-produzione: var(--map-produzione);
   --color-map-commercio: var(--map-commercio);
   --color-map-oggetti: var(--map-oggetti);
+  --color-map-sea: var(--map-sea);
 
   --font-sans: var(--font-text);
   --font-display: var(--font-title);

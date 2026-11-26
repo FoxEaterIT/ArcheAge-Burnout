@@ -27,10 +27,11 @@ Risposte in chat: stile della skill `caveman` (`.agents/skills/caveman/SKILL.md`
 - 2026-11-25: il prodotto si chiama ArcheAge Burnout; "Atlante dei commerci" era il nome del file offline.
 - 2026-11-25: porting su Next.js (App Router) + React + TypeScript + Tailwind CSS + shadcn/ui; scaffold fatto con `create-next-app` 16.4.6 e `shadcn` 4.23.0.
 - 2026-11-25: i dati si estraggono dall'originale con uno script ripetibile, mai ricopiati a mano (`docs/porting.md`).
+- 2026-11-26: la mappa interattiva usa solo dati nostri (Atlante e catalogo). I dati di siti terzi come interactivemap.app non si prendono: sono protetti e i loro termini lo vietano.
 - Rami: `main` è il ramo stabile. Ogni modifica parte da un branch staccato da `main` e ci torna con un merge. Niente merge e niente push senza richiesta. Un branch unito si cancella, in locale e su GitHub.
 - Si usa pnpm. Mai npm o yarn.
 - Prima di ogni merge, controllo del branch intero (`git diff main...<branch>`) con un `code-reviewer`: qualità, performance, bug. Si correggono i problemi, ognuno con il suo test quando è un bug, e si rilanciano le prove.
-- Design: si parte da `impeccable`. Contesto di prodotto e stile stanno in `PRODUCT.md` e `DESIGN.md` in radice, da creare con `/impeccable init` e `/impeccable document`. `design-taste-frontend` e `high-end-visual-design` alzano la qualità visiva; gli agent `impeccable-*` servono per asset, documentazione dello stile e revisione finale.
+- Design: si parte da `impeccable` (`PRODUCT.md` e `DESIGN.md` in radice). `design-taste-frontend` e `high-end-visual-design` alzano la qualità visiva; gli agent `impeccable-*` fanno asset, documentazione dello stile e revisione finale.
 - Consumo di token (abbonamenti Pro): sessione su Sonnet medium (`.claude/settings.json`); Opus high solo per piani grandi, architettura e review del branch. Subagent sempre con `model` ed `effort` espliciti. Superpowers è spento: come riaccenderlo è in `CLAUDE.md`.
 
 <!-- kit:section stack -->
@@ -40,7 +41,7 @@ Next.js 16 (App Router, `src/`) + React 19 + TypeScript. UI: Tailwind CSS v4 e s
 
 - `src/app/`: route. `next.config.ts` ha `cacheComponents` e `partialPrefetching` accesi (default di Next 16.4): per cache e prefetch valgono le skill `next-cache-components-*` e `next-partial-prefetching-*`.
 - `src/components/ui/`: componenti shadcn (`pnpm dlx shadcn@latest add <nome>`), si possono modificare segnando le modifiche con `Burnout:`. `cn` arriva dal pacchetto `cn` di shadcn, non da `clsx` + `tailwind-merge`.
-- `src/lib/`: logica pura da testare (rotte, ricette, orari degli eventi, statistiche del builder). I JSON di `src/data/generated/` si leggono solo da `game-data.utils.ts` (`server-only`, ai client passa il sottoinsieme che serve) e, per i tre piccoli usati nel browser (icone, collegamenti, indice delle tile), da `client-data.utils.ts`. Scheda inesistente: pagina 404 con stato 200, perché `notFound()` arriva dentro `<Suspense>`.
+- `src/lib/`: logica pura da testare (rotte, ricette, orari degli eventi, statistiche del builder). I JSON di `src/data/generated/` si leggono solo da `game-data.utils.ts` (`server-only`, ai client passa il sottoinsieme che serve) e, per i tre piccoli usati nel browser, da `client-data.utils.ts`. I punti della mappa arrivano per livello da `/mappa/livelli/<id>` (JSON statici). Scheda inesistente: pagina 404 con stato 200, perché `notFound()` arriva dentro `<Suspense>`.
 - `src/hooks/`: custom hook (`use-*.ts`), uno per file.
 - `e2e/`: test Playwright.
 
@@ -67,7 +68,7 @@ Dopo ogni modifica: `pnpm typecheck`, `pnpm lint`, `pnpm test`. Ogni sezione ha 
 <!-- kit:section roles -->
 ## Ruoli e dati sensibili
 
-Nessun login, nessun ruolo, nessun dato personale: solo dati di gioco. Le build del character builder restano nel browser (`localStorage`, chiavi `burnout-build-v1` e `burnout-build-v1-draft-<classe>`; quelle dell'originale, `burnout-character-v1`, vivevano su `file://` e non si possono recuperare).
+Nessun login, nessun ruolo, nessun dato personale: solo dati di gioco. Build del builder, raccolti e percorso della mappa restano nel browser (`localStorage`: `burnout-build-v1`, `burnout-build-v1-draft-<classe>`, `burnout-map-*-v1`). Le build dell'originale (`burnout-character-v1`) vivevano su `file://` e non si recuperano.
 
 <!-- kit:section domain -->
 ## Regole di dominio
@@ -84,7 +85,7 @@ Nessuna. L'app funziona con i soli dati inclusi; niente chiamate a server di gio
 <!-- kit:section style -->
 ## Stile grafico
 
-`DESIGN.md` (con `.impeccable/design.json`) è la fonte: palette di ArcheAge Chronicles in `src/app/globals.css`, solo tema scuro, titoli Marcellus e testo Noto Sans, la linea di Auroria come segno della casa. Direzione e contratto in `.impeccable/surfaces/src-app.md`. Tono: italiano semplice, da compagno di gilda.
+`DESIGN.md` (con `.impeccable/design.json`) è la fonte dello stile, con i token in `src/app/globals.css`; direzione e contratto in `.impeccable/surfaces/src-app.md`. Tono: italiano semplice, da compagno di gilda.
 
 <!-- BEGIN:kit -->
 ## How we work

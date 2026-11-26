@@ -1,12 +1,13 @@
 "use client"
 // Percorso: tappe in ordine sulla linea, lunghezza, tappe col clic o dai segnaposti visibili.
+import { memo } from "react"
 import { ArrowDownUp, MousePointerClick, Sparkles, Trash2, X } from "lucide-react"
+import { cn } from "cn"
 import { Button } from "@/components/ui/button"
-import type { useMapExplorer } from "@/hooks/use-map-explorer"
+import type { MapRouteModel } from "@/lib/map-explorer.types"
 
-type RouteModel = ReturnType<typeof useMapExplorer>[2]["route"]
-
-export function MapRoutePanel({ route }: { route: RouteModel }) {
+// memo: fino a 200 tappe, da non ridisegnare a ogni fotogramma mentre si trascina la mappa.
+export const MapRoutePanel = memo(function MapRoutePanel({ route }: { route: MapRouteModel }) {
   return (
     <section aria-labelledby="map-route-title" className="space-y-3 border-t border-line pt-4">
       <div className="flex items-baseline justify-between gap-2">
@@ -14,18 +15,23 @@ export function MapRoutePanel({ route }: { route: RouteModel }) {
         {route.stops.length > 1 ? <span className="text-xs text-muted tabular-nums">Lunghezza {route.lengthLabel} unità</span> : null}
       </div>
       <div className="flex flex-wrap gap-2">
-        <Button variant="outline" size="sm" aria-pressed={route.editing} onClick={route.toggleEditing} className={route.editing ? "border-gold text-gold" : undefined}>
+        <Button variant="outline" size="sm" aria-pressed={route.editing} onClick={route.toggleEditing} className={route.editing ? "border-gold text-gold max-lg:h-10" : "max-lg:h-10"}>
           <MousePointerClick aria-hidden />{route.editing ? "Clic sulla mappa: aggiunge tappe" : "Aggiungi tappe col clic"}
         </Button>
-        <Button variant="outline" size="sm" onClick={route.fromView}><Sparkles aria-hidden />Dai segnaposti visibili</Button>
+        <Button variant="outline" size="sm" className="max-lg:h-10" onClick={route.fromView}><Sparkles aria-hidden />Dai segnaposti visibili</Button>
       </div>
       {route.stops.length ? (
         <>
-          <ol className="relative max-h-64 space-y-1 overflow-auto pl-6 before:absolute before:top-2 before:bottom-2 before:left-[9px] before:w-[3px] before:rounded-full before:bg-gold-strong">
+          <ol className="max-h-64 overflow-auto">
             {route.stops.map((stop, i) => (
-              <li key={`${i}-${stop.x}-${stop.y}`} className="relative flex items-center gap-2 text-sm">
-                <span aria-hidden className="absolute -left-6 grid size-[21px] place-items-center rounded-full border-2 border-gold-strong bg-bg text-[10px] font-bold text-gold-strong tabular-nums">{i + 1}</span>
-                <span className="min-w-0 flex-1 truncate">{stop.name ?? <span className="text-muted tabular-nums">{stop.x}, {stop.y}</span>}</span>
+              <li key={`${i}-${stop.x}-${stop.y}`} className="relative flex items-center gap-2 py-1 pl-7 text-sm">
+                {/* Dorsale d'oro da un nodo all'altro: il primo tratto parte dal nodo, l'ultimo si ferma al nodo. */}
+                <span aria-hidden className={cn("absolute left-[9px] w-[3px] bg-gold-strong", i === 0 ? "top-1/2" : "top-0", i === route.stops.length - 1 ? "bottom-1/2" : "bottom-0")} />
+                <span aria-hidden className="absolute left-0 grid size-[21px] place-items-center rounded-full border-2 border-gold-strong bg-bg text-[10px] font-bold text-gold-strong tabular-nums">{i + 1}</span>
+                <span className="min-w-0 flex-1 truncate">
+                  {stop.name ? <>{stop.name} </> : null}
+                  <span className="text-xs text-dim tabular-nums">{stop.x}, {stop.y}</span>
+                </span>
                 <Button variant="ghost" size="icon-xs" className="text-dim" onClick={() => route.remove(i)} aria-label={`Togli la tappa ${i + 1}`}><X /></Button>
               </li>
             ))}
@@ -41,4 +47,4 @@ export function MapRoutePanel({ route }: { route: RouteModel }) {
       )}
     </section>
   )
-}
+})

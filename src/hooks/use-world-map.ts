@@ -120,10 +120,11 @@ export function useWorldMap(point: Point | null, overview: Point[], name: string
 
   const pointer = {
     onPointerDown: (event: React.PointerEvent<HTMLDivElement>) => {
+      // Ogni nuovo gesto riparte da zero, anche col dito dopo un trascinamento col mouse.
+      moved.current = false
       if (event.pointerType !== "mouse" || event.button !== 0) return
       const f = event.currentTarget
       drag.current = [event.clientX, event.clientY, f.scrollLeft, f.scrollTop]
-      moved.current = false
       f.setPointerCapture(event.pointerId)
     },
     onPointerMove: (event: React.PointerEvent<HTMLDivElement>) => {
