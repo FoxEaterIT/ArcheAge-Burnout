@@ -6,6 +6,7 @@ import {
   acquisition, artOf, dismantling, gameItems, hasRecord, itemLocations, itemUses, lootSources, lunastoneRanges, materialPoints, nameOf, recipeBook, tradeRoutes, worldCatalog,
 } from "./game-data.utils"
 import type { RecipeTier } from "./game.types"
+import type { MapSearchOverlay } from "./map-explorer.types"
 import type { EntryLink, PositionsSection, RecipeModel, RecordModel, UsesSection } from "./record.types"
 import { deliveryOnly, ingredients, multiplyIngredient, rewardName } from "./text.utils"
 import { PACKS_PER_BATCH, recordHref, routeStops } from "./trade.utils"
@@ -158,4 +159,12 @@ export function buildRecord(id: string): RecordModel | null {
     rewardRoutes.length && { id: "tratte", label: "Tratte" },
   ].filter((s): s is { id: string; label: string } => Boolean(s))
   return model
+}
+
+/** Ricerca di un oggetto sulla mappa interattiva: le sue fonti, oppure il punto della scheda; null se non ha posizioni. */
+export function mapSearchOverlay(record: RecordModel): MapSearchOverlay | null {
+  const href = recordHref(record.id)
+  if (record.positions) return { name: record.name, href, intro: record.positions.intro, sources: record.positions.sources, defaultSource: record.positions.defaultSource }
+  if (record.mapPoint) return { name: record.name, href, intro: null, sources: [{ label: "Punto della scheda", points: [record.mapPoint], total: 1 }], defaultSource: 0 }
+  return null
 }

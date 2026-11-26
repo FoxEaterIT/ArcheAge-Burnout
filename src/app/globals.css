@@ -25,6 +25,17 @@
   --gain: #b9df99;
   --loss: #ffb4a9;
 
+  /* Categorie della mappa interattiva: solo sulla mappa e nel suo pannello dei livelli.
+     Toni medi e chiari che si leggono sia sulla terra beige sia sul mare scuro delle tile. */
+  --map-alberi: #9ccc65;
+  --map-minerali: #b0bec5;
+  --map-piante: #f48fb1;
+  --map-creature: #ef6f6c;
+  --map-png: #64b5f6;
+  --map-produzione: #ffa24c;
+  --map-commercio: #4dd0c4;
+  --map-oggetti: #c58bd9;
+
   /* variabili di shadcn mappate sulla palette */
   --background: var(--bg);
   --foreground: var(--ink);
@@ -81,6 +92,14 @@
   --color-nightmare: var(--nightmare);
   --color-gain: var(--gain);
   --color-loss: var(--loss);
+  --color-map-alberi: var(--map-alberi);
+  --color-map-minerali: var(--map-minerali);
+  --color-map-piante: var(--map-piante);
+  --color-map-creature: var(--map-creature);
+  --color-map-png: var(--map-png);
+  --color-map-produzione: var(--map-produzione);
+  --color-map-commercio: var(--map-commercio);
+  --color-map-oggetti: var(--map-oggetti);
 
   --font-sans: var(--font-text);
   --font-display: var(--font-title);
@@ -118,4 +137,5 @@
     color: var(--dim);
   }
 }
+
 

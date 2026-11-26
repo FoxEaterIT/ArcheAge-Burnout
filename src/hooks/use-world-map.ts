@@ -7,8 +7,14 @@ import { MAP_RATIO, initialView, mapMarkers, maximumWidth, minimumWidth, visible
 const ZOOM_STEP = 1.6
 const EMPTY_VIEW: MapViewport = { width: 0, dpr: 1, scrollLeft: 0, scrollTop: 0, clientWidth: 0, clientHeight: 0 }
 
-/** Visore della mappa: zoom con pulsanti e rotella attorno al cursore, trascinamento col mouse, tile caricate a vista. */
-export function useWorldMap(point: Point | null, overview: Point[], name: string) {
+/** Vista di partenza in frazioni della mappa: larghezza del palco e centro. */
+type StartView = { width: number; center: [number, number] }
+
+/**
+ * Visore della mappa: zoom con pulsanti e rotella attorno al cursore, trascinamento col mouse, tile caricate a vista.
+ * `start` (letto una volta, al montaggio) sostituisce la vista iniziale: serve ai link condivisi della mappa interattiva.
+ */
+export function useWorldMap(point: Point | null, overview: Point[], name: string, start: StartView | null = null) {
   const frameRef = useRef<HTMLDivElement>(null)
   const [view, setView] = useState<MapViewport>(EMPTY_VIEW)
   const pending = useRef<{ left: number; top: number } | null>(null)
@@ -16,6 +22,9 @@ export function useWorldMap(point: Point | null, overview: Point[], name: string
   const [jumps, setJumps] = useState(0)
   const frameQueued = useRef(false)
   const drag = useRef<[number, number, number, number] | null>(null)
+  // Un clic dopo un trascinamento non deve selezionare niente.
+  const moved = useRef(false)
+  const startRef = useRef(start)
 
   const measure = useCallback((width: number) => {
     const f = frameRef.current
@@ -73,9 +82,15 @@ export function useWorldMap(point: Point | null, overview: Point[], name: string
   }, [limits, overview, point, position])
 
   useEffect(() => {
-    const id = requestAnimationFrame(reset)
+    const id = requestAnimationFrame(() => {
+      const f = frameRef.current
+      const first = startRef.current
+      startRef.current = null
+      if (f && first) position(first.width, first.center, [f.clientWidth / 2, f.clientHeight / 2])
+      else reset()
+    })
     return () => cancelAnimationFrame(id)
-  }, [reset])
+  }, [position, reset])
 
   // La rotella deve poter bloccare lo scorrimento della pagina: serve un listener non passivo.
   const zoomRef = useRef(zoom)
@@ -108,11 +123,13 @@ export function useWorldMap(point: Point | null, overview: Point[], name: string
       if (event.pointerType !== "mouse" || event.button !== 0) return
       const f = event.currentTarget
       drag.current = [event.clientX, event.clientY, f.scrollLeft, f.scrollTop]
+      moved.current = false
       f.setPointerCapture(event.pointerId)
     },
     onPointerMove: (event: React.PointerEvent<HTMLDivElement>) => {
       if (!drag.current) return
       const f = event.currentTarget
+      if (Math.hypot(drag.current[0] - event.clientX, drag.current[1] - event.clientY) > 4) moved.current = true
       f.scrollLeft = drag.current[2] + drag.current[0] - event.clientX
       f.scrollTop = drag.current[3] + drag.current[1] - event.clientY
     },
@@ -133,6 +150,7 @@ export function useWorldMap(point: Point | null, overview: Point[], name: string
   // Il ref resta fuori dall'oggetto: chi lo usa nel render deve leggere solo stato.
   return [frameRef, {
     width: view.width,
+    view,
     tiles,
     markers,
     onScroll,
@@ -141,6 +159,12 @@ export function useWorldMap(point: Point | null, overview: Point[], name: string
     zoomIn: () => zoom(ZOOM_STEP),
     zoomOut: () => zoom(1 / ZOOM_STEP),
     reset,
+    /** Ingrandisce attorno a un punto del riquadro (pixel). */
+    zoomAt: zoom,
+    /** Porta la vista a una larghezza e a un centro (frazioni), al centro del riquadro. */
+    goTo: (width: number, center: [number, number]) => position(width, center, midpoint()),
+    /** Vero se l'ultimo gesto del mouse era un trascinamento, non un clic. */
+    wasDrag: () => moved.current,
     canZoomIn: view.width > 0 && view.width < max,
     canZoomOut: view.width > 0 && view.width > min,
   }] as const

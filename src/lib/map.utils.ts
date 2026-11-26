@@ -22,6 +22,11 @@ export function toFraction([x, y]: Point): [number, number] {
   return [(x - MAP_BOUNDS[0]) / (MAP_BOUNDS[2] - MAP_BOUNDS[0]), (y - MAP_BOUNDS[1]) / (MAP_BOUNDS[3] - MAP_BOUNDS[1])]
 }
 
+/** Da frazioni della mappa a coordinate di gioco (intere). */
+export function fromFraction([a, b]: [number, number]): Point {
+  return [Math.round(MAP_BOUNDS[0] + a * (MAP_BOUNDS[2] - MAP_BOUNDS[0])), Math.round(MAP_BOUNDS[1] + b * (MAP_BOUNDS[3] - MAP_BOUNDS[1]))]
+}
+
 export const tileLevel = (width: number, dpr: number) => Math.min(6, Math.max(2, Math.ceil(Math.log2((width * dpr) / BASE))))
 
 /** Tile visibili (con un margine di una tile) per la larghezza e lo scorrimento correnti. */

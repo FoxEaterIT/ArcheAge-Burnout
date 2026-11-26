@@ -17,6 +17,7 @@ import traitJson from "@/data/generated/trait-book.json"
 import type { BuilderData } from "./builder.types"
 import { CLASSES, CLASS_NAMES } from "./builder.utils"
 import { DB_GROUPS, dbType, searchCatalog } from "./catalog.utils"
+import { buildMapLayers } from "./map-layers.utils"
 import { itemSlug } from "./text.utils"
 import type { Bench, CatalogEntry, CatalogQuery, CatalogResults, CatalogRow, CatalogTypeLink, GameItem, ItemLocations, ItemUse, Point, Recipe, Salvage, TradeRoute } from "./game.types"
 
@@ -114,6 +115,13 @@ export function searchMapItems(query: string) {
   if (!q) return { rows: [] as CatalogRow[], more: false }
   const hits = mapCandidates.filter(([, e]) => e[0].toLowerCase().includes(q)).toSorted((a, b) => Number(b[1][0].toLowerCase() === q) - Number(a[1][0].toLowerCase() === q))
   return { rows: hits.slice(0, MAP_SEARCH_LIMIT).map(([id, e]) => catalogRow(id, e)), more: hits.length > MAP_SEARCH_LIMIT }
+}
+
+let layers: ReturnType<typeof buildMapLayers> | null = null
+/** Livelli della mappa interattiva, costruiti alla prima richiesta (circa 200 ms) e poi riusati: i dati non cambiano. */
+export function mapLayers() {
+  layers ??= buildMapLayers({ locations: itemLocations, catalog: worldCatalog })
+  return layers
 }
 
 /** Dati del Character Builder, già ridotti a ciò che serve al client. */
